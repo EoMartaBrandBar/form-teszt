@@ -4,23 +4,157 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Márkaszemélyiség kvíz</title>
+
+<link rel="stylesheet" href="https://use.typekit.net/bja6xtr.css">
+
 <style>
   * { box-sizing: border-box; }
-  body { font-family: system-ui, sans-serif; margin:0; padding:16px; background:#242427; }
-  .quiz { max-width:480px; margin:auto; background:#fff; padding:20px; border-radius:12px; }
-  h1 { text-align:center; font-size:22px; margin-bottom:24px; }
-  h2 { font-size:18px; margin-bottom:16px; }
+
+  body { 
+    font-family: "atyp-bl-variable", sans-serif;
+    font-variation-settings: "opsz" 6, "ital" 0, "wght" 280;
+    margin:0; 
+    padding:16px; 
+    background:#242427; 
+  }
+
+  .quiz { 
+    max-width:520px; 
+    margin:auto; 
+    background:#fff; 
+    padding:28px 24px 24px; 
+    border-radius:18px; 
+    box-shadow:0 18px 45px rgba(0,0,0,0.25);
+  }
+
+  h1 { 
+    text-align:center; 
+    font-size:26px; 
+    margin-bottom:24px; 
+    letter-spacing:0.03em;
+  }
+
+  h2 { 
+    font-size:20px; 
+    margin-bottom:16px; 
+  }
+
+  p {
+    font-size:15px;
+    line-height:1.5;
+    margin-bottom:16px;
+  }
+
   .step { display:none; }
   .step.active { display:block; }
-  .options { display:grid; gap:16px; grid-template-columns:1fr; }
-  .option { border:2px solid #ddd; border-radius:12px; overflow:hidden; cursor:pointer; transition:0.2s; background:#fff; padding:8px; }
-  .option img { width:100%; height:180px; object-fit:cover; display:block; }
-  .option span { display:block; text-align:center; font-size:16px; margin-top:4px; }
-  .option.selected { border-color:#000; }
-  button { width:100%; margin-top:24px; padding:14px; font-size:16px; border:none; border-radius:10px; background:#000; color:white; }
-  .result ul { list-style:none; padding:0; }
-  .result li { padding:6px 0; font-size:16px; }
-  input { width:100%; padding:14px; margin-bottom:12px; font-size:16px; border-radius:8px; border:1px solid #ccc; }
+
+  .options { 
+    display:grid; 
+    gap:16px; 
+    grid-template-columns:1fr; 
+  }
+
+  .option { 
+    border:2px solid #e3e3e3; 
+    border-radius:16px; 
+    overflow:hidden; 
+    cursor:pointer; 
+    transition:transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    background:#fafafa; 
+  }
+
+  .option img { 
+    width:100%; 
+    height:220px; 
+    object-fit:cover; 
+    display:block; 
+  }
+
+  .option.selected { 
+    border-color:#111; 
+    box-shadow:0 0 0 2px #111; 
+    transform:translateY(-2px); 
+  }
+
+  button { 
+    width:100%; 
+    margin-top:24px; 
+    padding:14px; 
+    font-size:16px; 
+    border:none; 
+    border-radius:999px; 
+    background:#111; 
+    color:white; 
+    cursor:pointer;
+    transition:background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
+  }
+
+  button:hover:not(:disabled) { 
+    background:#000; 
+    box-shadow:0 8px 20px rgba(0,0,0,0.22);
+    transform:translateY(-1px);
+  }
+
+  button:active:not(:disabled) {
+    transform:translateY(0);
+    box-shadow:none;
+  }
+
+  button:disabled {
+    opacity:0.7;
+    cursor:default;
+    box-shadow:none;
+  }
+
+  .result ul { 
+    list-style:none; 
+    padding:0; 
+    margin:0;
+  }
+
+  .result li { 
+    padding:6px 0; 
+    font-size:16px; 
+    display:flex;
+    justify-content:space-between;
+  }
+
+  .result li strong {
+    font-weight:600;
+  }
+
+  input { 
+    width:100%; 
+    padding:14px; 
+    margin-bottom:12px; 
+    font-size:15px; 
+    border-radius:10px; 
+    border:1px solid #ccc; 
+  }
+
+  .send-status {
+    margin-top:8px;
+    font-size:14px;
+    color:#555;
+    text-align:center;
+    min-height:20px;
+  }
+
+  .spinner {
+    display:inline-block;
+    width:14px;
+    height:14px;
+    border:2px solid rgba(0,0,0,0.15);
+    border-top-color:#000;
+    border-radius:50%;
+    animation:spin 0.7s linear infinite;
+    vertical-align:middle;
+    margin-right:6px;
+  }
+
+  @keyframes spin {
+    to { transform:rotate(360deg); }
+  }
 </style>
 </head>
 <body>
@@ -33,7 +167,6 @@
 const archetypes = { Mars:0, Jupiter:0, Apollo:0, Ceres:0, Juno:0, Venus:0, Hera:0, Mercury:0 };
 const stepsEl = document.getElementById("steps");
 
-// kezdő step
 stepsEl.innerHTML += `
 <div class="step active">
   <h2>Üdvözlünk a Márkaszemélyiség kvízben!</h2>
@@ -64,20 +197,27 @@ const stepsData = [
 stepsData.forEach((s, i) => {
   let optionsHtml = s.options.map((opt, idx) => {
     if(s.type==="image"){
-      return `<div class="option" data-archetype="${s.archetypes[idx]}"><img src="${opt}"><span>${s.archetypes[idx]}</span></div>`;
+      return `<div class="option" data-archetype="${s.archetypes[idx]}"><img src="${opt}"></div>`;
     } else {
       return `<div class="option" data-archetype="${s.archetypes[idx]}">${opt}</div>`;
     }
   }).join("");
-  stepsEl.innerHTML += `<div class="step"><h2>${i+1}. ${s.q}</h2><div class="options">${optionsHtml}</div><button onclick="nextStep()">Tovább</button></div>`;
+  stepsEl.innerHTML += `
+    <div class="step">
+      <h2>${i+1}. ${s.q}</h2>
+      <div class="options">${optionsHtml}</div>
+      <button onclick="nextStep()">Tovább</button>
+    </div>
+  `;
 });
 
-// végső step – csak eredmény, nincs új név/email
+// végső step – csak eredmény, nincs új név/email, külön státusz szöveggel
 stepsEl.innerHTML += `
 <div class="step">
   <h2>Eredményed</h2>
   <div class="result" id="result"></div>
-  <button onclick="sendResults()">Eredmény mentése</button>
+  <button id="sendBtn" onclick="sendResults()">Eredmény mentése</button>
+  <div class="send-status" id="sendStatus"></div>
 </div>
 `;
 
@@ -105,7 +245,7 @@ document.addEventListener("click", e=>{
   option.classList.add("selected");
 });
 
-// lépés váltás
+// lépés váltás – utolsó kérdés gombja visz az eredmény stepre, ott már küldünk
 function nextStep(){
   const selected = steps[current].querySelector(".option.selected");
   if(!selected) { 
@@ -125,20 +265,32 @@ function showResult(){
   const total = Object.values(archetypes).reduce((a,b)=>a+b,0);
   let html="<ul>";
   for(const [k,v] of Object.entries(archetypes)){
-    html+=`<li><strong>${k}</strong>: ${Math.round(v/total*100)}%</li>`;
+    html+=`<li><strong>${k}</strong><span>${Math.round(v/total*100)}%</span></li>`;
   }
   html+="</ul>";
   document.getElementById("result").innerHTML=html;
 }
 
-// mentés Google Sheet-be – Vercel proxyval, a START mezőkből
+// mentés Google Sheet-be – Vercel proxyval, a START mezőkből, egyszeri kattintás + loading
+let isSending = false;
+
 function sendResults(){
+  if (isSending) return; // több kattintás tiltása
+
   const email = document.getElementById("startEmail").value.trim();
   const name = document.getElementById("startName").value.trim();
   if(!email || !name){ 
     alert("Hiányzó név vagy email. Lépj vissza az elejére és töltsd ki."); 
     return; 
   }
+
+  const btn = document.getElementById("sendBtn");
+  const statusEl = document.getElementById("sendStatus");
+
+  isSending = true;
+  btn.disabled = true;
+  btn.textContent = "Küldés folyamatban...";
+  statusEl.innerHTML = '<span class="spinner"></span>Eredmények mentése...';
 
   fetch("https://brand-quiz-proxy.vercel.app/api/quiz-proxy", {
     method:"POST",
@@ -148,11 +300,15 @@ function sendResults(){
   .then(res => res.text())
   .then(text => {
     console.log("Válasz a szervertől:", text);
-    alert("Az eredményeket elmentettük!");
+    statusEl.textContent = "Az eredményeket elmentettük. Köszönjük a kitöltést!";
+    btn.textContent = "Elküldve";
   })
   .catch(err => {
     console.error(err);
-    alert("Hálózati hiba: " + err);
+    statusEl.textContent = "Hiba történt a mentés során. Kérjük, próbáld meg később újra.";
+    btn.disabled = false;
+    btn.textContent = "Eredmény mentése";
+    isSending = false;
   });
 }
 </script>
