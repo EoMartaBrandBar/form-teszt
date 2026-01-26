@@ -2,65 +2,85 @@
 <html lang="hu">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Archetípus teszt</title>
 
 <style>
   * { box-sizing: border-box; }
+
   body {
     font-family: system-ui, sans-serif;
     background: #f5f5f5;
-    padding: 40px;
+    margin: 0;
+    padding: 16px;
   }
 
   .quiz {
-    max-width: 900px;
-    margin: auto;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
     background: white;
-    padding: 40px;
+    padding: 20px;
     border-radius: 12px;
   }
 
-  h1 { text-align: center; margin-bottom: 40px; }
-  h2 { margin-bottom: 20px; }
+  h1 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
 
   .step { display: none; }
   .step.active { display: block; }
 
   .options {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .option {
-    cursor: pointer;
-    border: 2px solid transparent;
-    border-radius: 10px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
     overflow: hidden;
+    cursor: pointer;
     transition: 0.2s;
+    background: #fff;
   }
 
   .option img {
     width: 100%;
+    height: 180px;
+    object-fit: cover;
     display: block;
   }
 
   .option span {
     display: block;
-    padding: 10px;
+    padding: 12px;
     text-align: center;
-    background: #fafafa;
+    font-size: 16px;
   }
 
   .option.selected {
-    border-color: black;
+    border-color: #000;
   }
 
   button {
-    margin-top: 30px;
-    padding: 12px 24px;
+    width: 100%;
+    margin-top: 24px;
+    padding: 14px;
     font-size: 16px;
-    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    background: #000;
+    color: white;
   }
 
   .result ul {
@@ -69,14 +89,17 @@
   }
 
   .result li {
-    margin-bottom: 8px;
+    padding: 6px 0;
+    font-size: 16px;
   }
 
   input {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     margin-bottom: 12px;
     font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
   }
 </style>
 </head>
@@ -84,10 +107,8 @@
 <body>
 
 <div class="quiz">
-<h1>Archetípus teszt</h1>
-
-<div id="steps"></div>
-
+  <h1>Archetípus teszt</h1>
+  <div id="steps"></div>
 </div>
 
 <script>
@@ -113,12 +134,12 @@ const stepsEl = document.getElementById("steps");
 
 questions.forEach((q, i) => {
   stepsEl.innerHTML += `
-    <div class="step ${i===0?'active':''}" data-step="${i}">
+    <div class="step ${i===0?'active':''}">
       <h2>${i+1}. ${q.q}</h2>
       <div class="options">
         ${q.a.map(type => `
           <div class="option" data-type="${type}">
-            <img src="https://picsum.photos/400/300?random=${i+type}">
+            <img src="https://picsum.photos/600/400?random=${i+type}">
             <span>${type}</span>
           </div>
         `).join("")}
@@ -129,11 +150,11 @@ questions.forEach((q, i) => {
 });
 
 stepsEl.innerHTML += `
-  <div class="step" data-step="10">
+  <div class="step">
     <h2>Eredményed</h2>
     <div class="result" id="result"></div>
 
-    <h3>Kapcsolat</h3>
+    <h2>Kapcsolat</h2>
     <input placeholder="Név">
     <input placeholder="Email">
   </div>
@@ -143,16 +164,22 @@ let current = 0;
 const steps = document.querySelectorAll(".step");
 
 document.addEventListener("click", e => {
-  if (e.target.closest(".option")) {
-    const options = e.target.closest(".options").querySelectorAll(".option");
-    options.forEach(o => o.classList.remove("selected"));
-    e.target.closest(".option").classList.add("selected");
-  }
+  const option = e.target.closest(".option");
+  if (!option) return;
+
+  option.parentElement
+    .querySelectorAll(".option")
+    .forEach(o => o.classList.remove("selected"));
+
+  option.classList.add("selected");
 });
 
 function nextStep() {
   const selected = steps[current].querySelector(".option.selected");
-  if (!selected) return alert("Válassz egy opciót!");
+  if (!selected) {
+    alert("Válassz egy opciót!");
+    return;
+  }
 
   archetypes[selected.dataset.type]++;
   steps[current].classList.remove("active");
@@ -160,13 +187,15 @@ function nextStep() {
 
   if (current === 10) showResult();
   steps[current].classList.add("active");
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function showResult() {
   const total = Object.values(archetypes).reduce((a,b)=>a+b,0);
   let html = "<ul>";
   for (const [k,v] of Object.entries(archetypes)) {
-    html += `<li>${k}: ${Math.round(v/total*100)}%</li>`;
+    html += `<li><strong>${k}</strong>: ${Math.round(v/total*100)}%</li>`;
   }
   html += "</ul>";
   document.getElementById("result").innerHTML = html;
