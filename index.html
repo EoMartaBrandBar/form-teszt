@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>Archetípus teszt</title>
+
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, sans-serif;
+    background: #f5f5f5;
+    padding: 40px;
+  }
+
+  .quiz {
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+  }
+
+  h1 { text-align: center; margin-bottom: 40px; }
+  h2 { margin-bottom: 20px; }
+
+  .step { display: none; }
+  .step.active { display: block; }
+
+  .options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .option {
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: 0.2s;
+  }
+
+  .option img {
+    width: 100%;
+    display: block;
+  }
+
+  .option span {
+    display: block;
+    padding: 10px;
+    text-align: center;
+    background: #fafafa;
+  }
+
+  .option.selected {
+    border-color: black;
+  }
+
+  button {
+    margin-top: 30px;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .result ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .result li {
+    margin-bottom: 8px;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    font-size: 16px;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="quiz">
+<h1>Archetípus teszt</h1>
+
+<div id="steps"></div>
+
+</div>
+
+<script>
+const questions = [
+  { q: "Melyik világ vonz?", a: ["hero","lover","sage"] },
+  { q: "Melyik hangulat áll közel hozzád?", a: ["creator","rebel","caregiver"] },
+  { q: "Melyik érték fontosabb?", a: ["ruler","innocent","sage"] },
+  { q: "Hogyan oldasz meg problémát?", a: ["hero","creator","sage"] },
+  { q: "Melyik szerep illik rád?", a: ["caregiver","lover","ruler"] },
+  { q: "Mi motivál leginkább?", a: ["rebel","hero","creator"] },
+  { q: "Milyen környezetben érzed jól magad?", a: ["innocent","lover","caregiver"] },
+  { q: "Mi jellemez inkább?", a: ["sage","ruler","rebel"] },
+  { q: "Mit keresel az életben?", a: ["creator","hero","lover"] },
+  { q: "Mi ad biztonságot?", a: ["caregiver","innocent","ruler"] }
+];
+
+const archetypes = {
+  hero:0, lover:0, sage:0, rebel:0,
+  creator:0, caregiver:0, ruler:0, innocent:0
+};
+
+const stepsEl = document.getElementById("steps");
+
+questions.forEach((q, i) => {
+  stepsEl.innerHTML += `
+    <div class="step ${i===0?'active':''}" data-step="${i}">
+      <h2>${i+1}. ${q.q}</h2>
+      <div class="options">
+        ${q.a.map(type => `
+          <div class="option" data-type="${type}">
+            <img src="https://picsum.photos/400/300?random=${i+type}">
+            <span>${type}</span>
+          </div>
+        `).join("")}
+      </div>
+      <button onclick="nextStep()">Tovább</button>
+    </div>
+  `;
+});
+
+stepsEl.innerHTML += `
+  <div class="step" data-step="10">
+    <h2>Eredményed</h2>
+    <div class="result" id="result"></div>
+
+    <h3>Kapcsolat</h3>
+    <input placeholder="Név">
+    <input placeholder="Email">
+  </div>
+`;
+
+let current = 0;
+const steps = document.querySelectorAll(".step");
+
+document.addEventListener("click", e => {
+  if (e.target.closest(".option")) {
+    const options = e.target.closest(".options").querySelectorAll(".option");
+    options.forEach(o => o.classList.remove("selected"));
+    e.target.closest(".option").classList.add("selected");
+  }
+});
+
+function nextStep() {
+  const selected = steps[current].querySelector(".option.selected");
+  if (!selected) return alert("Válassz egy opciót!");
+
+  archetypes[selected.dataset.type]++;
+  steps[current].classList.remove("active");
+  current++;
+
+  if (current === 10) showResult();
+  steps[current].classList.add("active");
+}
+
+function showResult() {
+  const total = Object.values(archetypes).reduce((a,b)=>a+b,0);
+  let html = "<ul>";
+  for (const [k,v] of Object.entries(archetypes)) {
+    html += `<li>${k}: ${Math.round(v/total*100)}%</li>`;
+  }
+  html += "</ul>";
+  document.getElementById("result").innerHTML = html;
+}
+</script>
+
+</body>
+</html>
