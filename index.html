@@ -86,12 +86,8 @@
     transition:width 0.25s ease;
   }
 
-  .step { 
-    display:none; 
-  }
-  .step.active { 
-    display:block; 
-  }
+  .step { display:none; }
+  .step.active { display:block; }
 
   h2 { 
     font-size:18px; 
@@ -258,87 +254,264 @@ const progressBar = document.getElementById("progressBar");
 const progressLabel = document.getElementById("progressLabel");
 const quizHeader = document.getElementById("quizHeader");
 
-const textArchetypesOrder = ["Mars","Mercurius","Jupiter","Apollo","Terra","Ceres","Juno","Venus"];
+const archetypeOrder = ["Mars","Mercurius","Jupiter","Apollo","Terra","Ceres","Juno","Venus"];
 
 // kezdő step
 stepsEl.innerHTML += `
 <div class="step active">
   <h2>Üdvözlünk a Márkaszemélyiség kvízben!</h2>
-  <p>Ez a kvíz segít feltérképezni, milyen archetípus jellemzi a céget. Kérjük, add meg az email címed, hogy az eredményeket el tudjuk küldeni.</p>
+  <p>Ez a kvíz segít feltérképezni, milyen archetípus jellemzi a céget. Kezdésnek kérjük, add meg a neved és email címed</p>
   <input type="email" placeholder="Email címed" id="startEmail">
   <input type="text" placeholder="Név" id="startName">
   <button onclick="startQuiz()">Kezdhetjük</button>
 </div>
 `;
 
-// INNENTŐL minden step 8 opciót vár (Mars–Mercurius–Jupiter–Apollo–Terra–Ceres–Juno–Venus)
 const stepsData = [
-  { q:"Vendégváró tér", type:"image", options:[
-    "https://picsum.photos/600/400?random=1",
-    "https://picsum.photos/600/400?random=2",
-    "https://picsum.photos/600/400?random=3",
-    "https://picsum.photos/600/400?random=4",
-    "https://picsum.photos/600/400?random=5",
-    "https://picsum.photos/600/400?random=6",
-    "https://picsum.photos/600/400?random=7",
-    "https://picsum.photos/600/400?random=8"
-  ]},
-  // IDE RAKHATOD A TÖBBI 7–8 LÉPÉST UGYANEZZEL A 8-OPCIÓS SÉMÁVAL
-  { q:"Csak a képzelet szab nekünk határt", type:"text", options:[
-    "Ez a jó irány, és mi meg is valósítjuk.",
-    "A tudás hatalom",
-    "A kompromisszumkészség erény, nem gyengeség",
-    "Egyedül kicsik vagyunk, együtt nagyot alkotunk",
-    "A világ a mi játszóterünk",
-    "A változásokból rugalmasan és optimistán kihozzuk a legjobbat.",
-    "Stabil, földelt alapokra építkezünk.",
-    "A gondoskodás és biztonság az első."
-  ]},
-  // … folytathatod a többi kérdéssel, mindegyik options tömb 8 elemmel
+  {
+    q:"Vendégváró tér",
+    type:"image",
+    options:[
+      "https://picsum.photos/600/400?random=1",
+      "https://picsum.photos/600/400?random=2",
+      "https://picsum.photos/600/400?random=3",
+      "https://picsum.photos/600/400?random=4",
+      "https://picsum.photos/600/400?random=5",
+      "https://picsum.photos/600/400?random=6",
+      "https://picsum.photos/600/400?random=7",
+      "https://picsum.photos/600/400?random=8"
+    ]
+  },
+  {
+    q:"Tárgyaló",
+    type:"image",
+    options:[
+      "https://picsum.photos/600/400?random=9",
+      "https://picsum.photos/600/400?random=10",
+      "https://picsum.photos/600/400?random=11",
+      "https://picsum.photos/600/400?random=12",
+      "https://picsum.photos/600/400?random=13",
+      "https://picsum.photos/600/400?random=14",
+      "https://picsum.photos/600/400?random=15",
+      "https://picsum.photos/600/400?random=16"
+    ]
+  },
+  {
+    q:"Festmény a tárgyaló falán",
+    type:"image",
+    options:[
+      "https://picsum.photos/600/400?random=17",
+      "https://picsum.photos/600/400?random=18",
+      "https://picsum.photos/600/400?random=19",
+      "https://picsum.photos/600/400?random=20",
+      "https://picsum.photos/600/400?random=21",
+      "https://picsum.photos/600/400?random=22",
+      "https://picsum.photos/600/400?random=23",
+      "https://picsum.photos/600/400?random=24"
+    ]
+  },
+  {
+    q:"Női dresszkód",
+    type:"image",
+    options:[
+      "https://picsum.photos/600/400?random=25",
+      "https://picsum.photos/600/400?random=26",
+      "https://picsum.photos/600/400?random=27",
+      "https://picsum.photos/600/400?random=28",
+      "https://picsum.photos/600/400?random=29",
+      "https://picsum.photos/600/400?random=30",
+      "https://picsum.photos/600/400?random=31",
+      "https://picsum.photos/600/400?random=32"
+    ]
+  },
+  {
+    q:"Férfi dresszkód",
+    type:"image",
+    options:[
+      "https://picsum.photos/600/400?random=33",
+      "https://picsum.photos/600/400?random=34",
+      "https://picsum.photos/600/400?random=35",
+      "https://picsum.photos/600/400?random=36",
+      "https://picsum.photos/600/400?random=37",
+      "https://picsum.photos/600/400?random=38",
+      "https://picsum.photos/600/400?random=39",
+      "https://picsum.photos/600/400?random=40"
+    ]
+  },
+  {
+    q:"“1. TÁRGYALÓ”-felirat",
+    type:"image",
+    options:[
+      "https://picsum.photos/600/400?random=41",
+      "https://picsum.photos/600/400?random=42",
+      "https://picsum.photos/600/400?random=43",
+      "https://picsum.photos/600/400?random=44",
+      "https://picsum.photos/600/400?random=45",
+      "https://picsum.photos/600/400?random=46",
+      "https://picsum.photos/600/400?random=47",
+      "https://picsum.photos/600/400?random=48"
+    ]
+  },
+  {
+    q:"Képernyőkímélő diavetítés",
+    type:"image",
+    options:[
+      "https://picsum.photos/600/400?random=49",
+      "https://picsum.photos/600/400?random=50",
+      "https://picsum.photos/600/400?random=51",
+      "https://picsum.photos/600/400?random=52",
+      "https://picsum.photos/600/400?random=53",
+      "https://picsum.photos/600/400?random=54",
+      "https://picsum.photos/600/400?random=55",
+      "https://picsum.photos/600/400?random=56"
+    ]
+  },
+  {
+    q:"A cég személyiségéhez leginkább illő színek",
+    type:"image",
+    options:[
+      "https://picsum.photos/600/400?random=57",
+      "https://picsum.photos/600/400?random=58",
+      "https://picsum.photos/600/400?random=59",
+      "https://picsum.photos/600/400?random=60",
+      "https://picsum.photos/600/400?random=61",
+      "https://picsum.photos/600/400?random=62",
+      "https://picsum.photos/600/400?random=63",
+      "https://picsum.photos/600/400?random=64"
+    ]
+  },
+  {
+    q:"Jelmondatok",
+    type:"text",
+    options:[
+      "Mi vagyunk a változás motorja",
+      "Mi diktáljuk a tempót",
+      "Mi írjuk a szabályokat",
+      "A tudás hatalom",
+      "Az idő nekünk dolgozik",
+      "A fenntartható közös jót szolgáljuk",
+      "Együtt nagyot alkotunk",
+      "A világ a mi játszóterünk"
+    ]
+  },
+  {
+    q:"Mi a cég legnagyobb értéke? / Mit tartasz a legnagyobb értéknek?",
+    type:"text",
+    options:[
+      "Merészség az újításhoz, energia a megvalósításhoz",
+      "Az újdonságban rejlő lehetőségek kiaknázásának képessége",
+      "Megalkuvás nélküli megkérdőjelezhetetlenség",
+      "A precíz tervezés, tiszta folyamatok, a munkatársak tudása",
+      "A folytonosság biztonsága, távlatokban való gondolkodás",
+      "A felelős hozzáállás, mely túlmutat a cég keretein",
+      "Az eltérő nézőpontok elfogadása, képesség az együttműködésre",
+      "A változásokból rugalmasan és optimistán kihozza a legjobbat"
+    ]
+  },
+  {
+    q:"Mi lenne a vezetőség legnagyobb kudarca? Ha a munkatársak azt éreznék, hogy…",
+    type:"text",
+    options:[
+      "szakmailag nem elég úttörő, ami innen kikerül",
+      "a versenytársak megelőznek minket",
+      "nem elég sikeres a cég",
+      "nem elég átlátható és hatékony a szervezet működése",
+      "a sok bizonytalanság negatívan hat az emberekre és a munkára",
+      "a céget csak a profit érdekli, nem közvetít értéket",
+      "nincsenek eléggé emberileg támogatva, nincs közösség",
+      "unalmasak, nem elég motiválóak a feladatok"
+    ]
+  },
+  {
+    q:"Milyen az ideális munkatárs?",
+    type:"text",
+    options:[
+      "Aki proaktív, elébe megy a dolgoknak, folyamatosan megújítja a munkamódszereit",
+      "Aki tisztában van a trendekkel és hatékonyan alkalmazni is tudja az új fejlesztéseket",
+      "Aki karizmatikus, kezébe veszi még a nehéz feladatokat is és meg is valósítja őket",
+      "Aki precíz, fegyelmezett, fókuszált, rendszerezett és hatékony ",
+      "Pontosan tudod, miben számíthatsz rá, egyenletes teljesítményt nyújt",
+      "Mindig lehet hozzá fordulni segítségért, mindig készen áll támogatni a munkatársakat",
+      "Aki igazi csapatjátékos és a legtöbbet tudja kihozni másokból",
+      "Aki mindig pozitívan áll a dolgokhoz, tele van ötletekkel"
+    ]
+  },
+  {
+    q:"Milyen az ideális munkatárs?",
+    type:"text",
+    options:[
+      "Aki proaktív, elébe megy a dolgoknak, ezáltal a változások motorja.",
+      "Aki karizmatikus, kezébe veszi még a nehéz feladatokat is.",
+      "Aki precíz, fegyelmezett, fókuszált és pontosan tudod, miben számíthatsz rá.",
+      "Aki képes arra, hogy a különböző álláspontokat közös nevezőre hozza.",
+      "Aki igazi csapatjátékos és a legtöbbet tudja kihozni másokból.",
+      "Aki mindig optimistán áll a dolgokhoz, tele van jó ötletekkel.",
+      "Aki nyugodt, kiegyensúlyozott és biztonságot sugároz.",
+      "Aki gondoskodó, odafigyel másokra, és támogatja a többieket."
+    ]
+  },
+  {
+    q:"Mi a cég sikerstratégiája?",
+    type:"text",
+    options:[
+      "a status quo megkérdőjelezése",
+      "elsőként kovácsolni tőkét a piac változásaiból",
+      "a vízió és a hatékony vezetés",
+      "az elemzésen alapuló tervezés",
+      "a biztos alapok lefektetése és a bevált gyakorlatok alkalmazása",
+      "felelősségteljes hozzáállás",
+      "a különböző igények kielégítése ",
+      "az új helyzetekre való rugalmas reagálás"
+    ]
+  }
 ];
 
-// archetype hozzárendelés MINDEN kérdésnél
+// kérdés stepek generálása
 stepsData.forEach((s, i) => {
-  const archetypeOrder = textArchetypesOrder; // minden stepnél ugyanaz a sorrend
   let optionsHtml = s.options.map((opt, idx) => {
     const archetype = archetypeOrder[idx];
-    if(s.type==="image"){
+    if(s.type === "image"){
       return `<div class="option" data-archetype="${archetype}"><img src="${opt}" alt=""></div>`;
     } else {
       return `<div class="option" data-archetype="${archetype}">${opt}</div>`;
     }
   }).join("");
+
+  // utolsó kérdésnél a gomb már sendResults()-ot hív
+  const isLastQuestion = (i === stepsData.length - 1);
+  const buttonHandler = isLastQuestion ? "sendResults()" : "nextStep()";
+  const buttonLabel = isLastQuestion ? "Eredmény mentése" : "Tovább";
+
   stepsEl.innerHTML += `
     <div class="step">
       <h2>${i+1}. ${s.q}</h2>
       <div class="options">${optionsHtml}</div>
-      <button onclick="nextStep()">Tovább</button>
+      <button onclick="${buttonHandler}">${buttonLabel}</button>
+      <div class="send-status" ${isLastQuestion ? 'id="sendStatus"' : ''}></div>
     </div>
   `;
 });
 
-// végső step összevontan – eredmény + küldés
+// végső step – CSAK eredmény (küldés után jelenik meg)
 stepsEl.innerHTML += `
 <div class="step">
   <h2>Eredményed</h2>
   <ul class="result-list" id="result"></ul>
-  <button id="sendBtn" onclick="sendResults()">Eredmény mentése</button>
-  <div class="send-status" id="sendStatus"></div>
 </div>
 `;
 
 let current = 0;
 const steps = document.querySelectorAll(".step");
-const totalQuestionSteps = steps.length - 2; // az első (intro) + utolsó (eredmény) nélkül
+const totalQuestionSteps = stepsData.length; // intro és eredmény nélkül
 
 function updateProgress() {
-  // Kérdésszám: az aktuális step indexe - 1 (mert 0 az intro, utolsó az eredmény)
-  const questionIndex = Math.min(Math.max(current - 1, 0), totalQuestionSteps);
+  // current: 0 = intro, 1..N kérdések, utolsó = eredmény
+  const questionIndex = Math.min(Math.max(current - 1, 0), totalQuestionSteps - 1);
   const total = totalQuestionSteps;
   if (total <= 0) return;
 
   progressLabel.textContent = `${questionIndex + 1} / ${total}`;
-  const percent = ((questionIndex) / total) * 100;
+  const percent = (questionIndex / total) * 100;
   progressBar.style.width = `${percent}%`;
 }
 
@@ -351,10 +524,9 @@ function startQuiz(){
     return; 
   }
   steps[0].classList.remove("active");
-  current++;
+  current = 1;
   steps[current].classList.add("active");
 
-  // címsor helyett progress bar
   quizHeader.style.display = "none";
   progressWrap.style.display = "block";
   updateProgress();
@@ -368,7 +540,7 @@ document.addEventListener("click", e=>{
   option.classList.add("selected");
 });
 
-// lépés váltás – utolsó kérdés után eredmény + küldés gomb
+// lépés váltás (köztes kérdésekhez)
 function nextStep(){
   const selected = steps[current].querySelector(".option.selected");
   if(!selected) { 
@@ -378,32 +550,34 @@ function nextStep(){
   archetypes[selected.dataset.archetype]++;
   steps[current].classList.remove("active");
   current++;
-
-  if(current === steps.length - 1) {
-    showResult();
-  }
-
   steps[current].classList.add("active");
   updateProgress();
   window.scrollTo({top:0, behavior:"smooth"});
 }
 
-// eredmény megjelenítés
+// eredmény megjelenítés (külön step)
 function showResult(){
   const total = Object.values(archetypes).reduce((a,b)=>a+b,0) || 1;
   let html="";
-  for(const key of textArchetypesOrder){
+  for(const key of archetypeOrder){
     const v = archetypes[key] || 0;
     html += `<li><strong>${key}</strong><span>${Math.round(v/total*100)}%</span></li>`;
   }
-  document.getElementById("result").innerHTML=html;
+  document.getElementById("result").innerHTML = html;
 }
 
-// mentés Google Sheet-be – Vercel proxyval, egyszeri kattintás + loading
+// utolsó kérdés gombja – ment és aztán eredmény step
 let isSending = false;
 
 function sendResults(){
   if (isSending) return;
+
+  const selected = steps[current].querySelector(".option.selected");
+  if(!selected) { 
+    alert("Válassz egy opciót!"); 
+    return; 
+  }
+  archetypes[selected.dataset.archetype]++;
 
   const email = document.getElementById("startEmail").value.trim();
   const name = document.getElementById("startName").value.trim();
@@ -412,7 +586,7 @@ function sendResults(){
     return; 
   }
 
-  const btn = document.getElementById("sendBtn");
+  const btn = steps[current].querySelector("button");
   const statusEl = document.getElementById("sendStatus");
 
   isSending = true;
@@ -429,7 +603,15 @@ function sendResults(){
   .then(text => {
     console.log("Válasz a szervertől:", text);
     statusEl.textContent = "Az eredményeket elmentettük. Köszönjük a kitöltést!";
-    btn.textContent = "Elküldve";
+
+    // lépés az EREDMÉNY stepre
+    steps[current].classList.remove("active");
+    current = steps.length - 1; // utolsó step
+    steps[current].classList.add("active");
+    progressBar.style.width = "100%";
+    progressLabel.textContent = `${totalQuestionSteps} / ${totalQuestionSteps}`;
+    showResult();
+    window.scrollTo({top:0, behavior:"smooth"});
   })
   .catch(err => {
     console.error(err);
