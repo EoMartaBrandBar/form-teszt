@@ -6,7 +6,7 @@
 <title>Márkaszemélyiség kvíz</title>
 <style>
   * { box-sizing: border-box; }
-  body { font-family: system-ui, sans-serif; margin:0; padding:16px; background:#f5f5f5; }
+  body { font-family: system-ui, sans-serif; margin:0; padding:16px; background:#242427; }
   .quiz { max-width:480px; margin:auto; background:#fff; padding:20px; border-radius:12px; }
   h1 { text-align:center; font-size:22px; margin-bottom:24px; }
   h2 { font-size:18px; margin-bottom:16px; }
@@ -30,10 +30,20 @@
 </div>
 
 <script>
-// Archetípus pontok
 const archetypes = { Mars:0, Jupiter:0, Apollo:0, Ceres:0, Juno:0, Venus:0, Hera:0, Mercury:0 };
+const stepsEl = document.getElementById("steps");
 
-// 14 step definíciója
+// kezdő step
+stepsEl.innerHTML += `
+<div class="step active">
+  <h2>Üdvözlünk a Márkaszemélyiség kvízben!</h2>
+  <p>Ez a kvíz segít feltérképezni, milyen archetípus jellemzi a céget. Kérjük, add meg az email címed, hogy az eredményeket el tudjuk küldeni.</p>
+  <input type="email" placeholder="Email címed" id="startEmail">
+  <input type="text" placeholder="Név" id="startName">
+  <button onclick="startQuiz()">Kezdhetjük</button>
+</div>
+`;
+
 const stepsData = [
   { q:"Vendégváró tér", type:"image", options:["https://picsum.photos/600/400?random=1","https://picsum.photos/600/400?random=2","https://picsum.photos/600/400?random=3","https://picsum.photos/600/400?random=4","https://picsum.photos/600/400?random=5","https://picsum.photos/600/400?random=6","https://picsum.photos/600/400?random=7","https://picsum.photos/600/400?random=8"], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Venus","Hera","Mercury"] },
   { q:"Tárgyaló", type:"image", options:["https://picsum.photos/600/400?random=9","https://picsum.photos/600/400?random=10","https://picsum.photos/600/400?random=11"], archetypes:["Mars","Jupiter","Apollo"] },
@@ -51,9 +61,6 @@ const stepsData = [
   { q:"Mi a cég sikerstratégiája?", type:"text", options:["a státus qou megkérdőjelezése","a vízió és a hatékony vezetés","az elemzésen alapuló tervezés","a biztos alapok lefektetése","a különböző igények kielégítése","a lehetőségek kiaknázása"], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Venus"] },
 ];
 
-const stepsEl = document.getElementById("steps");
-
-// Step-ek generálása
 stepsData.forEach((s, i) => {
   let optionsHtml = s.options.map((opt, idx) => {
     if(s.type==="image"){
@@ -62,16 +69,35 @@ stepsData.forEach((s, i) => {
       return `<div class="option" data-archetype="${s.archetypes[idx]}">${opt}</div>`;
     }
   }).join("");
-  stepsEl.innerHTML += `<div class="step ${i===0?'active':''}"><h2>${i+1}. ${s.q}</h2><div class="options">${optionsHtml}</div><button onclick="nextStep()">Tovább</button></div>`;
+  stepsEl.innerHTML += `<div class="step"><h2>${i+1}. ${s.q}</h2><div class="options">${optionsHtml}</div><button onclick="nextStep()">Tovább</button></div>`;
 });
 
-// Végső step: kontakt
-stepsEl.innerHTML += `<div class="step"><h2>Eredményed</h2><div class="result" id="result"></div><h2>Kapcsolat</h2><input placeholder="Név"><input placeholder="Email"></div>`;
+// végső step
+stepsEl.innerHTML += `
+<div class="step">
+  <h2>Eredményed</h2>
+  <div class="result" id="result"></div>
+  <h2>Kapcsolat</h2>
+  <input placeholder="Név" id="endName">
+  <input placeholder="Email" id="endEmail">
+  <button onclick="sendResults()">Eredmény mentése</button>
+</div>
+`;
 
 let current = 0;
 const steps = document.querySelectorAll(".step");
 
-// Választás kezelése
+// start quiz
+function startQuiz(){
+  const email = document.getElementById("startEmail").value.trim();
+  const name = document.getElementById("startName").value.trim();
+  if(!email || !name) { alert("Kérlek add meg az email címed és neved!"); return; }
+  steps[0].classList.remove("active");
+  current++;
+  steps[current].classList.add("active");
+}
+
+// kiválasztás
 document.addEventListener("click", e=>{
   const option = e.target.closest(".option");
   if(!option) return;
@@ -79,7 +105,7 @@ document.addEventListener("click", e=>{
   option.classList.add("selected");
 });
 
-// Következő lépés
+// lépés váltás
 function nextStep(){
   const selected = steps[current].querySelector(".option.selected");
   if(!selected) { alert("Válassz egy opciót!"); return; }
@@ -91,7 +117,7 @@ function nextStep(){
   window.scrollTo({top:0, behavior:"smooth"});
 }
 
-// Eredmény mutatása
+// eredmény megjelenítés
 function showResult(){
   const total = Object.values(archetypes).reduce((a,b)=>a+b,0);
   let html="<ul>";
@@ -100,6 +126,25 @@ function showResult(){
   }
   html+="</ul>";
   document.getElementById("result").innerHTML=html;
+}
+
+// mentés Google Sheet-be
+function sendResults(){
+  const email = document.getElementById("endEmail").value.trim();
+  const name = document.getElementById("endName").value.trim();
+  if(!email || !name){ alert("Kérlek add meg az email címed és neved!"); return; }
+
+  fetch("https://script.google.com/macros/s/AKfycbxo4-CRiscNr58ayf_duA_s_AMfyVObr8J2Wv9wCH4xFMm9grf4MD8YZuvlNRLbIaYB/exec", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ email: email, name: name, results: archetypes })
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.status==="ok") alert("Az eredményeket elmentettük!");
+    else alert("Hiba történt a mentés során.");
+  })
+  .catch(err=>alert("Hálózati hiba: " + err));
 }
 </script>
 </body>
