@@ -145,17 +145,21 @@ input{
   border-radius:16px;
   padding:18px;
   margin-bottom:12px;
+  cursor:pointer;
+  transition:max-height 0.3s ease, opacity 0.3s ease;
 }
 
 .result-head{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  cursor:pointer;
 }
 
+.result-head:hover .arrow{transform:rotate(180deg)}
+
 .result-title{font-variation-settings:"wght" 500}
-.result-percent{opacity:.6}
+.result-percent{opacity:.6; font-variation-settings:"wght" 500}
+.arrow{font-size:16px; transition:transform 0.3s ease; display:inline-block}
 
 .result-desc{
   max-height:0;
@@ -164,6 +168,13 @@ input{
   font-size:13px;
   color:var(--text-muted);
   margin-top:12px;
+  transition:max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.result-card.expanded .result-desc{
+  max-height:200px;
+  opacity:1;
+  margin-top:16px;
 }
 
 .footer{
@@ -451,7 +462,7 @@ stepsData.forEach((s, i) => {
 stepsEl.innerHTML += `
 <div class="step">
   <h2>Eredményed</h2>
-  <ul class="result-list" id="result"></ul>
+  <div class="result-list" id="result"></div>
 </div>
 `;
 
@@ -513,12 +524,39 @@ function nextStep(){
 // eredmény megjelenítés (külön step)
 function showResult(){
   const total = Object.values(archetypes).reduce((a,b)=>a+b,0) || 1;
-  let html="";
-  for(const key of archetypeOrder){
-    const v = archetypes[key] || 0;
-    html += `<li><strong>${key}</strong><span>${Math.round(v/total*100)}%</span></li>`;
-  }
+  
+  // Pontszámok tömb készítése csökkenő sorrendben
+  const scores = Object.entries(archetypes).map(([name, score]) => ({
+    name,
+    percent: Math.round(score / total * 100)
+  })).sort((a, b) => b.percent - a.percent);
+  
+  let html = "";
+  scores.forEach(score => {
+    html += `
+      <div class="result-card" data-name="${score.name}">
+        <div class="result-head">
+          <div>
+            <div class="result-title">${score.name}</div>
+            <div class="result-percent">${score.percent}%</div>
+          </div>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="result-desc">
+          Ez az archetípus ${score.percent}% arányban jelenik meg a márkád személyiségében.
+        </div>
+      </div>
+    `;
+  });
+  
   document.getElementById("result").innerHTML = html;
+  
+  // Dropdown kattintás eseménykezelő
+  document.querySelectorAll(".result-card").forEach(card => {
+    card.querySelector(".result-head").addEventListener("click", () => {
+      card.classList.toggle("expanded");
+    });
+  });
 }
 
 // utolsó kérdés gombja – ment és aztán eredmény step
