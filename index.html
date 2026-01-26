@@ -3,204 +3,104 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Archetípus teszt</title>
-
+<title>Márkaszemélyiség kvíz</title>
 <style>
   * { box-sizing: border-box; }
-
-  body {
-    font-family: system-ui, sans-serif;
-    background: #f5f5f5;
-    margin: 0;
-    padding: 16px;
-  }
-
-  .quiz {
-    width: 100%;
-    max-width: 480px;
-    margin: 0 auto;
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-  }
-
-  h1 {
-    text-align: center;
-    font-size: 22px;
-    margin-bottom: 24px;
-  }
-
-  h2 {
-    font-size: 18px;
-    margin-bottom: 16px;
-  }
-
-  .step { display: none; }
-  .step.active { display: block; }
-
-  .options {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .option {
-    border: 2px solid #ddd;
-    border-radius: 12px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: 0.2s;
-    background: #fff;
-  }
-
-  .option img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    display: block;
-  }
-
-  .option span {
-    display: block;
-    padding: 12px;
-    text-align: center;
-    font-size: 16px;
-  }
-
-  .option.selected {
-    border-color: #000;
-  }
-
-  button {
-    width: 100%;
-    margin-top: 24px;
-    padding: 14px;
-    font-size: 16px;
-    border: none;
-    border-radius: 10px;
-    background: #000;
-    color: white;
-  }
-
-  .result ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  .result li {
-    padding: 6px 0;
-    font-size: 16px;
-  }
-
-  input {
-    width: 100%;
-    padding: 14px;
-    margin-bottom: 12px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-  }
+  body { font-family: system-ui, sans-serif; margin:0; padding:16px; background:#f5f5f5; }
+  .quiz { max-width:480px; margin:auto; background:#fff; padding:20px; border-radius:12px; }
+  h1 { text-align:center; font-size:22px; margin-bottom:24px; }
+  h2 { font-size:18px; margin-bottom:16px; }
+  .step { display:none; }
+  .step.active { display:block; }
+  .options { display:grid; gap:16px; grid-template-columns:1fr; }
+  .option { border:2px solid #ddd; border-radius:12px; overflow:hidden; cursor:pointer; transition:0.2s; background:#fff; padding:8px; }
+  .option img { width:100%; height:180px; object-fit:cover; display:block; }
+  .option span { display:block; text-align:center; font-size:16px; margin-top:4px; }
+  .option.selected { border-color:#000; }
+  button { width:100%; margin-top:24px; padding:14px; font-size:16px; border:none; border-radius:10px; background:#000; color:white; }
+  .result ul { list-style:none; padding:0; }
+  .result li { padding:6px 0; font-size:16px; }
+  input { width:100%; padding:14px; margin-bottom:12px; font-size:16px; border-radius:8px; border:1px solid #ccc; }
 </style>
 </head>
-
 <body>
-
 <div class="quiz">
-  <h1>Archetípus teszt</h1>
+  <h1>Márkaszemélyiség kvíz</h1>
   <div id="steps"></div>
 </div>
 
 <script>
-const questions = [
-  { q: "Melyik világ vonz?", a: ["her","lover","sage"] },
-  { q: "Melyik hangulat áll közel hozzád?", a: ["creator","rebel","caregiver"] },
-  { q: "Melyik érték fontosabb?", a: ["ruler","innocent","sage"] },
-  { q: "Hogyan oldasz meg problémát?", a: ["hero","creator","sage"] },
-  { q: "Melyik szerep illik rád?", a: ["caregiver","lover","ruler"] },
-  { q: "Mi motivál leginkább?", a: ["rebel","hero","creator"] },
-  { q: "Milyen környezetben érzed jól magad?", a: ["innocent","lover","caregiver"] },
-  { q: "Mi jellemez inkább?", a: ["sage","ruler","rebel"] },
-  { q: "Mit keresel az életben?", a: ["creator","hero","lover"] },
-  { q: "Mi ad biztonságot?", a: ["caregiver","innocent","ruler"] }
-];
+// Archetípus pontok
+const archetypes = { Mars:0, Jupiter:0, Apollo:0, Ceres:0, Juno:0, Venus:0, Hera:0, Mercury:0 };
 
-const archetypes = {
-  hero:0, lover:0, sage:0, rebel:0,
-  creator:0, caregiver:0, ruler:0, innocent:0
-};
+// 14 step definíciója
+const stepsData = [
+  { q:"Vendégváró tér", type:"image", options:["https://picsum.photos/600/400?random=1","https://picsum.photos/600/400?random=2","https://picsum.photos/600/400?random=3","https://picsum.photos/600/400?random=4","https://picsum.photos/600/400?random=5","https://picsum.photos/600/400?random=6","https://picsum.photos/600/400?random=7","https://picsum.photos/600/400?random=8"], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Venus","Hera","Mercury"] },
+  { q:"Tárgyaló", type:"image", options:["https://picsum.photos/600/400?random=9","https://picsum.photos/600/400?random=10","https://picsum.photos/600/400?random=11"], archetypes:["Mars","Jupiter","Apollo"] },
+  { q:"Festmény a tárgyaló falán", type:"image", options:["https://picsum.photos/600/400?random=12","https://picsum.photos/600/400?random=13","https://picsum.photos/600/400?random=14"], archetypes:["Ceres","Juno","Venus"] },
+  { q:"Női dresszkód", type:"image", options:["https://picsum.photos/600/400?random=15","https://picsum.photos/600/400?random=16","https://picsum.photos/600/400?random=17"], archetypes:["Mars","Jupiter","Apollo"] },
+  { q:"Férfi dresszkód", type:"image", options:["https://picsum.photos/600/400?random=18","https://picsum.photos/600/400?random=19","https://picsum.photos/600/400?random=20"], archetypes:["Ceres","Juno","Venus"] },
+  { q:"“1. TÁRGYALÓ”-felirat", type:"image", options:["https://picsum.photos/600/400?random=21","https://picsum.photos/600/400?random=22"], archetypes:["Mars","Jupiter"] },
+  { q:"Képernyőkímélő diavetítés", type:"image", options:["https://picsum.photos/600/400?random=23","https://picsum.photos/600/400?random=24"], archetypes:["Apollo","Ceres"] },
+  { q:"A cég személyiségéhez leginkább illő színek", type:"image", options:["https://picsum.photos/600/400?random=25","https://picsum.photos/600/400?random=26"], archetypes:["Juno","Venus"] },
+  { q:"Csak a képzelet szab nekünk határt", type:"text", options:["Ez a jó irány, és mi meg is valósítjuk.","A tudás hatalom","A kompromisszumkészség erény, nem gyengeség","Egyedül kicsik vagyunk, együtt nagyot alkotunk","A világ a mi játszóterünk","A változásokból rugalmasan és optimistán kihozzuk a legjobbat."], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Venus"] },
+  { q:"Mi a legnagyobb erénye a cégnek?", type:"text", options:["A bátorság az újításhoz, erő a megvalósításhoz.","Az ambíció, a nem-megalkuvás, mely a siker alapja.","A precíz tervezés, tiszta folyamatok, a munkatársak tudása.","A felelős hozzáállás, mely túlmutat a cég keretein.","Az eltérő nézőpontok elfogadása, képesség az együttműködésre.","A változásokból rugalmasan és optimistán kihozzuk a legjobbat."], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Venus"] },
+  { q:"Mit élne meg a leginkább kudarcként a vezetőség?", type:"text", options:["szakmailag nem elég előremutató, ami innen kikerül","a versenytársak megelőznek minket","nem elég átlátható a cégstratégia és a működés","a sok bizonytalanság negatívan hat az emberekre és a munkára","nincsenek eléggé emberileg támogatva, nincs közösség","unalmasak, nem elég motiválóak a feladatok"], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Hera"] },
+  { q:"Öt év múlva miből fogjátok látni, hogy jó úton jártok?", type:"text", options:["olyan innovációkat sikerült megvalósítanunk, mely egyedülálló az iparágunkban és sok újítás van még a tarsolyunkban","több területen sikerült domináns piaci szereplővé válni, cégünk a kategória megkerülhetetlen tényezőjévé vált","mindenki tudja a dolgát, mindennek megvan a gazdája, a szervezet flottul működik és ezáltal jobban tudunk építeni az embereink szakértelmére","kellemes a munkakörnyezet, nincs konfliktus, széthúzás, versengés csak nyugodt, egymásra odafigyelő és előremutató párbeszéd","összekovácsoltunk egy jó csapatot (kicsi a fluktuáció, könnyű embert találni), jó a házon belüli és az ügyfelekkel való együttműködés","az emberek élvezik a munkájukat, örömüket lelik abban, hogy itt dolgoznak nem csupán a társaság miatt, hanem mert itt nyitottak az ötleteikre"], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Venus"] },
+  { q:"Milyen az ideális munkatárs?", type:"text", options:["Aki proaktív, elébe megy a dolgoknak, ezáltal a változások motorja","Aki karizmatikus, kezébe veszi még a nehéz feladatokat és meg is valósítja őket","Aki precíz, fegyelmezett, fókuszált és pontosan tudod, miben számíthatsz rá","Aki képes arra, hogy a különböző álláspontokat közös nevezőre hozza","Aki igazi csapatjátékos és a legtöbbet tudja kihozni másokból","Aki mindig optimistán áll a dolgokhoz, tele van jó ötletekkel"], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Venus"] },
+  { q:"Mi a cég sikerstratégiája?", type:"text", options:["a státus qou megkérdőjelezése","a vízió és a hatékony vezetés","az elemzésen alapuló tervezés","a biztos alapok lefektetése","a különböző igények kielégítése","a lehetőségek kiaknázása"], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Venus"] },
+];
 
 const stepsEl = document.getElementById("steps");
 
-questions.forEach((q, i) => {
-  stepsEl.innerHTML += `
-    <div class="step ${i===0?'active':''}">
-      <h2>${i+1}. ${q.q}</h2>
-      <div class="options">
-        ${q.a.map(type => `
-          <div class="option" data-type="${type}">
-            <img src="https://picsum.photos/600/400?random=${i+type}">
-            <span>${type}</span>
-          </div>
-        `).join("")}
-      </div>
-      <button onclick="nextStep()">Tovább</button>
-    </div>
-  `;
+// Step-ek generálása
+stepsData.forEach((s, i) => {
+  let optionsHtml = s.options.map((opt, idx) => {
+    if(s.type==="image"){
+      return `<div class="option" data-archetype="${s.archetypes[idx]}"><img src="${opt}"><span>${s.archetypes[idx]}</span></div>`;
+    } else {
+      return `<div class="option" data-archetype="${s.archetypes[idx]}">${opt}</div>`;
+    }
+  }).join("");
+  stepsEl.innerHTML += `<div class="step ${i===0?'active':''}"><h2>${i+1}. ${s.q}</h2><div class="options">${optionsHtml}</div><button onclick="nextStep()">Tovább</button></div>`;
 });
 
-stepsEl.innerHTML += `
-  <div class="step">
-    <h2>Eredményed</h2>
-    <div class="result" id="result"></div>
-
-    <h2>Kapcsolat</h2>
-    <input placeholder="Név">
-    <input placeholder="Email">
-  </div>
-`;
+// Végső step: kontakt
+stepsEl.innerHTML += `<div class="step"><h2>Eredményed</h2><div class="result" id="result"></div><h2>Kapcsolat</h2><input placeholder="Név"><input placeholder="Email"></div>`;
 
 let current = 0;
 const steps = document.querySelectorAll(".step");
 
-document.addEventListener("click", e => {
+// Választás kezelése
+document.addEventListener("click", e=>{
   const option = e.target.closest(".option");
-  if (!option) return;
-
-  option.parentElement
-    .querySelectorAll(".option")
-    .forEach(o => o.classList.remove("selected"));
-
+  if(!option) return;
+  option.parentElement.querySelectorAll(".option").forEach(o=>o.classList.remove("selected"));
   option.classList.add("selected");
 });
 
-function nextStep() {
+// Következő lépés
+function nextStep(){
   const selected = steps[current].querySelector(".option.selected");
-  if (!selected) {
-    alert("Válassz egy opciót!");
-    return;
-  }
-
-  archetypes[selected.dataset.type]++;
+  if(!selected) { alert("Válassz egy opciót!"); return; }
+  archetypes[selected.dataset.archetype]++;
   steps[current].classList.remove("active");
   current++;
-
-  if (current === 10) showResult();
+  if(current===steps.length-1) showResult();
   steps[current].classList.add("active");
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({top:0, behavior:"smooth"});
 }
 
-function showResult() {
+// Eredmény mutatása
+function showResult(){
   const total = Object.values(archetypes).reduce((a,b)=>a+b,0);
-  let html = "<ul>";
-  for (const [k,v] of Object.entries(archetypes)) {
-    html += `<li><strong>${k}</strong>: ${Math.round(v/total*100)}%</li>`;
+  let html="<ul>";
+  for(const [k,v] of Object.entries(archetypes)){
+    html+=`<li><strong>${k}</strong>: ${Math.round(v/total*100)}%</li>`;
   }
-  html += "</ul>";
-  document.getElementById("result").innerHTML = html;
+  html+="</ul>";
+  document.getElementById("result").innerHTML=html;
 }
 </script>
-
 </body>
 </html>
