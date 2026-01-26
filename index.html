@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Márkaszemélyiség kvíz</title>
+<title>Márkaszemélyiség kví</title>
 <style>
   * { box-sizing: border-box; }
   body { font-family: system-ui, sans-serif; margin:0; padding:16px; background:#242427; }
@@ -72,14 +72,11 @@ stepsData.forEach((s, i) => {
   stepsEl.innerHTML += `<div class="step"><h2>${i+1}. ${s.q}</h2><div class="options">${optionsHtml}</div><button onclick="nextStep()">Tovább</button></div>`;
 });
 
-// végső step
+// végső step – csak eredmény, nincs új név/email
 stepsEl.innerHTML += `
 <div class="step">
   <h2>Eredményed</h2>
   <div class="result" id="result"></div>
-  <h2>Kapcsolat</h2>
-  <input placeholder="Név" id="endName">
-  <input placeholder="Email" id="endEmail">
   <button onclick="sendResults()">Eredmény mentése</button>
 </div>
 `;
@@ -134,25 +131,20 @@ function showResult(){
   document.getElementById("result").innerHTML=html;
 }
 
-// mentés Google Sheet-be - FormData-val
+// mentés Google Sheet-be – Vercel proxyval, a START mezőkből
 function sendResults(){
-  const email = document.getElementById("endEmail").value.trim();
-  const name = document.getElementById("endName").value.trim();
+  const email = document.getElementById("startEmail").value.trim();
+  const name = document.getElementById("startName").value.trim();
   if(!email || !name){ 
-    alert("Kérlek add meg az email címed és neved!"); 
+    alert("Hiányzó név vagy email. Lépj vissza az elejére és töltsd ki."); 
     return; 
   }
 
-  const formData = new FormData();
-  formData.append("email", email);
-  formData.append("name", name);
-  formData.append("results", JSON.stringify(archetypes));
-
   fetch("https://brand-quiz-proxy.vercel.app/api/quiz-proxy", {
-  method:"POST",
-  headers:{ "Content-Type":"application/json" },
-  body: JSON.stringify({ email: email, name: name, results: archetypes })
-})
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ email: email, name: name, results: archetypes })
+  })
   .then(res => res.text())
   .then(text => {
     console.log("Válasz a szervertől:", text);
