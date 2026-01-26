@@ -91,7 +91,10 @@ const steps = document.querySelectorAll(".step");
 function startQuiz(){
   const email = document.getElementById("startEmail").value.trim();
   const name = document.getElementById("startName").value.trim();
-  if(!email || !name) { alert("Kérlek add meg az email címed és neved!"); return; }
+  if(!email || !name) { 
+    alert("Kérlek add meg az email címed és neved!"); 
+    return; 
+  }
   steps[0].classList.remove("active");
   current++;
   steps[current].classList.add("active");
@@ -108,7 +111,10 @@ document.addEventListener("click", e=>{
 // lépés váltás
 function nextStep(){
   const selected = steps[current].querySelector(".option.selected");
-  if(!selected) { alert("Válassz egy opciót!"); return; }
+  if(!selected) { 
+    alert("Válassz egy opciót!"); 
+    return; 
+  }
   archetypes[selected.dataset.archetype]++;
   steps[current].classList.remove("active");
   current++;
@@ -128,23 +134,33 @@ function showResult(){
   document.getElementById("result").innerHTML=html;
 }
 
-// mentés Google Sheet-be
+// mentés Google Sheet-be - FormData-val
 function sendResults(){
   const email = document.getElementById("endEmail").value.trim();
   const name = document.getElementById("endName").value.trim();
-  if(!email || !name){ alert("Kérlek add meg az email címed és neved!"); return; }
+  if(!email || !name){ 
+    alert("Kérlek add meg az email címed és neved!"); 
+    return; 
+  }
+
+  const formData = new FormData();
+  formData.append("email", email);
+  formData.append("name", name);
+  formData.append("results", JSON.stringify(archetypes));
 
   fetch("https://script.google.com/macros/s/AKfycbxo4-CRiscNr58ayf_duA_s_AMfyVObr8J2Wv9wCH4xFMm9grf4MD8YZuvlNRLbIaYB/exec", {
     method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({ email: email, name: name, results: archetypes })
+    body: formData // NINCS headers.Content-Type
   })
-  .then(res=>res.json())
-  .then(data=>{
-    if(data.status==="ok") alert("Az eredményeket elmentettük!");
-    else alert("Hiba történt a mentés során.");
+  .then(res => res.text()) // vagy .json() ha JSON-t adsz vissza
+  .then(text => {
+    console.log("Válasz a szervertől:", text);
+    alert("Az eredményeket elmentettük!");
   })
-  .catch(err=>alert("Hálózati hiba: " + err));
+  .catch(err => {
+    console.error(err);
+    alert("Hálózati hiba: " + err);
+  });
 }
 </script>
 </body>
