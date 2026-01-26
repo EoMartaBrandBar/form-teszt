@@ -5,88 +5,158 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Márkaszemélyiség kvíz</title>
 
+<link rel="icon" type="image/png" href="https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/69370eeaa7ca9b8de5ae2d6f_favion-bb.png">
 <link rel="stylesheet" href="https://use.typekit.net/bja6xtr.css">
 
 <style>
   * { box-sizing: border-box; }
 
+  :root {
+    --bg-body:#242427;
+    --bg-card:#ffffff;
+    --border-soft:#e3e3e3;
+    --text-main:#111111;
+    --accent:#111111;
+    --accent-soft:#f5f5f7;
+  }
+
   body { 
-    font-family: "atyp-bl-variable", sans-serif;
-    font-variation-settings: "opsz" 6, "ital" 0, "wght" 280;
     margin:0; 
     padding:16px; 
-    background:#242427; 
+    background:var(--bg-body); 
+    color:var(--text-main);
+    font-family: "atyp-bl-variable", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-variation-settings: "opsz" 6, "ital" 0, "wght" 320;
   }
 
   .quiz { 
     max-width:520px; 
-    margin:auto; 
-    background:#fff; 
-    padding:28px 24px 24px; 
+    margin:0 auto; 
+    background:var(--bg-card); 
+    padding:24px 20px 20px; 
     border-radius:18px; 
     box-shadow:0 18px 45px rgba(0,0,0,0.25);
+    position:relative;
   }
 
-  h1 { 
+  .quiz-header {
+    margin-bottom:18px;
+  }
+
+  .quiz-title {
     text-align:center; 
-    font-size:26px; 
-    margin-bottom:24px; 
+    font-size:24px; 
+    margin:0 0 4px;
     letter-spacing:0.03em;
+    font-variation-settings:"opsz" 6, "ital" 0, "wght" 620;
   }
 
-  h2 { 
-    font-size:20px; 
-    margin-bottom:16px; 
+  .quiz-sub {
+    text-align:center;
+    font-size:13px;
+    opacity:0.7;
+    margin:0;
   }
 
-  p {
-    font-size:15px;
-    line-height:1.5;
+  .progress-wrap {
+    display:none;
     margin-bottom:16px;
   }
 
-  .step { display:none; }
-  .step.active { display:block; }
+  .progress-label {
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    margin-bottom:6px;
+    font-variation-settings:"opsz" 6, "ital" 0, "wght" 550;
+  }
+
+  .progress-bar {
+    width:100%;
+    height:4px;
+    border-radius:999px;
+    background:var(--accent-soft);
+    overflow:hidden;
+  }
+
+  .progress-bar-inner {
+    height:100%;
+    width:0%;
+    background:var(--accent);
+    transition:width 0.25s ease;
+  }
+
+  .step { 
+    display:none; 
+  }
+  .step.active { 
+    display:block; 
+  }
+
+  h2 { 
+    font-size:18px; 
+    margin:0 0 10px; 
+    font-variation-settings:"opsz" 6, "ital" 0, "wght" 580;
+  }
+
+  p {
+    font-size:14px;
+    line-height:1.5;
+    margin:0 0 14px;
+  }
 
   .options { 
     display:grid; 
-    gap:16px; 
+    gap:14px; 
     grid-template-columns:1fr; 
   }
 
+  @media (min-width:600px) {
+    .options {
+      grid-template-columns:1fr 1fr;
+    }
+  }
+
   .option { 
-    border:2px solid #e3e3e3; 
+    border:2px solid var(--border-soft); 
     border-radius:16px; 
     overflow:hidden; 
     cursor:pointer; 
-    transition:transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-    background:#fafafa; 
+    transition:
+      transform 0.15s ease, 
+      box-shadow 0.15s ease, 
+      border-color 0.15s ease,
+      background 0.15s ease;
+    background:var(--accent-soft); 
   }
 
   .option img { 
     width:100%; 
-    height:220px; 
+    height:200px; 
     object-fit:cover; 
     display:block; 
   }
 
   .option.selected { 
-    border-color:#111; 
-    box-shadow:0 0 0 2px #111; 
+    border-color:var(--accent); 
+    box-shadow:0 0 0 2px var(--accent); 
     transform:translateY(-2px); 
+    background:#ffffff;
   }
 
   button { 
     width:100%; 
-    margin-top:24px; 
-    padding:14px; 
-    font-size:16px; 
+    margin-top:20px; 
+    padding:13px; 
+    font-size:15px; 
     border:none; 
     border-radius:999px; 
-    background:#111; 
+    background:var(--accent); 
     color:white; 
     cursor:pointer;
     transition:background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
+    font-family: "atyp-bl-variable", system-ui, sans-serif;
+    font-variation-settings:"opsz" 6, "ital" 0, "wght" 580;
   }
 
   button:hover:not(:disabled) { 
@@ -106,44 +176,50 @@
     box-shadow:none;
   }
 
-  .result ul { 
+  .result-list { 
     list-style:none; 
     padding:0; 
     margin:0;
   }
 
-  .result li { 
-    padding:6px 0; 
-    font-size:16px; 
+  .result-list li { 
+    padding:5px 0; 
+    font-size:15px; 
     display:flex;
     justify-content:space-between;
   }
 
-  .result li strong {
-    font-weight:600;
+  .result-list li strong {
+    font-variation-settings:"opsz" 6, "ital" 0, "wght" 600;
   }
 
   input { 
     width:100%; 
-    padding:14px; 
-    margin-bottom:12px; 
-    font-size:15px; 
+    padding:12px; 
+    margin-bottom:10px; 
+    font-size:14px; 
     border-radius:10px; 
-    border:1px solid #ccc; 
+    border:1px solid #ccc;
+    font-family: "atyp-bl-variable", system-ui, sans-serif;
+    font-variation-settings:"opsz" 6, "ital" 0, "wght" 360;
+  }
+
+  input::placeholder {
+    opacity:0.6;
   }
 
   .send-status {
     margin-top:8px;
-    font-size:14px;
+    font-size:13px;
     color:#555;
     text-align:center;
-    min-height:20px;
+    min-height:18px;
   }
 
   .spinner {
     display:inline-block;
-    width:14px;
-    height:14px;
+    width:13px;
+    height:13px;
     border:2px solid rgba(0,0,0,0.15);
     border-top-color:#000;
     border-radius:50%;
@@ -159,14 +235,32 @@
 </head>
 <body>
 <div class="quiz">
-  <h1>Márkaszemélyiség kvíz</h1>
+  <div class="quiz-header" id="quizHeader">
+    <h1 class="quiz-title">Márkaszemélyiség kvíz</h1>
+    <p class="quiz-sub">8 archetípus, 1 márkaszemélyiség.</p>
+  </div>
+
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-label" id="progressLabel">1 / 13</div>
+    <div class="progress-bar">
+      <div class="progress-bar-inner" id="progressBar"></div>
+    </div>
+  </div>
+
   <div id="steps"></div>
 </div>
 
 <script>
-const archetypes = { Mars:0, Jupiter:0, Apollo:0, Ceres:0, Juno:0, Venus:0, Hera:0, Mercury:0 };
+const archetypes = { Mars:0, Mercurius:0, Jupiter:0, Apollo:0, Terra:0, Ceres:0, Juno:0, Venus:0 };
 const stepsEl = document.getElementById("steps");
+const progressWrap = document.getElementById("progressWrap");
+const progressBar = document.getElementById("progressBar");
+const progressLabel = document.getElementById("progressLabel");
+const quizHeader = document.getElementById("quizHeader");
 
+const textArchetypesOrder = ["Mars","Mercurius","Jupiter","Apollo","Terra","Ceres","Juno","Venus"];
+
+// kezdő step
 stepsEl.innerHTML += `
 <div class="step active">
   <h2>Üdvözlünk a Márkaszemélyiség kvízben!</h2>
@@ -177,29 +271,41 @@ stepsEl.innerHTML += `
 </div>
 `;
 
+// INNENTŐL minden step 8 opciót vár (Mars–Mercurius–Jupiter–Apollo–Terra–Ceres–Juno–Venus)
 const stepsData = [
-  { q:"Vendégváró tér", type:"image", options:["https://picsum.photos/600/400?random=1","https://picsum.photos/600/400?random=2","https://picsum.photos/600/400?random=3","https://picsum.photos/600/400?random=4","https://picsum.photos/600/400?random=5","https://picsum.photos/600/400?random=6","https://picsum.photos/600/400?random=7","https://picsum.photos/600/400?random=8"], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Venus","Hera","Mercury"] },
-  { q:"Tárgyaló", type:"image", options:["https://picsum.photos/600/400?random=9","https://picsum.photos/600/400?random=10","https://picsum.photos/600/400?random=11"], archetypes:["Mars","Jupiter","Apollo"] },
-  { q:"Festmény a tárgyaló falán", type:"image", options:["https://picsum.photos/600/400?random=12","https://picsum.photos/600/400?random=13","https://picsum.photos/600/400?random=14"], archetypes:["Ceres","Juno","Venus"] },
-  { q:"Női dresszkód", type:"image", options:["https://picsum.photos/600/400?random=15","https://picsum.photos/600/400?random=16","https://picsum.photos/600/400?random=17"], archetypes:["Mars","Jupiter","Apollo"] },
-  { q:"Férfi dresszkód", type:"image", options:["https://picsum.photos/600/400?random=18","https://picsum.photos/600/400?random=19","https://picsum.photos/600/400?random=20"], archetypes:["Ceres","Juno","Venus"] },
-  { q:"“1. TÁRGYALÓ”-felirat", type:"image", options:["https://picsum.photos/600/400?random=21","https://picsum.photos/600/400?random=22"], archetypes:["Mars","Jupiter"] },
-  { q:"Képernyőkímélő diavetítés", type:"image", options:["https://picsum.photos/600/400?random=23","https://picsum.photos/600/400?random=24"], archetypes:["Apollo","Ceres"] },
-  { q:"A cég személyiségéhez leginkább illő színek", type:"image", options:["https://picsum.photos/600/400?random=25","https://picsum.photos/600/400?random=26"], archetypes:["Juno","Venus"] },
-  { q:"Csak a képzelet szab nekünk határt", type:"text", options:["Ez a jó irány, és mi meg is valósítjuk.","A tudás hatalom","A kompromisszumkészség erény, nem gyengeség","Egyedül kicsik vagyunk, együtt nagyot alkotunk","A világ a mi játszóterünk","A változásokból rugalmasan és optimistán kihozzuk a legjobbat."], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Venus"] },
-  { q:"Mi a legnagyobb erénye a cégnek?", type:"text", options:["A bátorság az újításhoz, erő a megvalósításhoz.","Az ambíció, a nem-megalkuvás, mely a siker alapja.","A precíz tervezés, tiszta folyamatok, a munkatársak tudása.","A felelős hozzáállás, mely túlmutat a cég keretein.","Az eltérő nézőpontok elfogadása, képesség az együttműködésre.","A változásokból rugalmasan és optimistán kihozzuk a legjobbat."], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Venus"] },
-  { q:"Mit élne meg a leginkább kudarcként a vezetőség?", type:"text", options:["szakmailag nem elég előremutató, ami innen kikerül","a versenytársak megelőznek minket","nem elég átlátható a cégstratégia és a működés","a sok bizonytalanság negatívan hat az emberekre és a munkára","nincsenek eléggé emberileg támogatva, nincs közösség","unalmasak, nem elég motiválóak a feladatok"], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Hera"] },
-  { q:"Öt év múlva miből fogjátok látni, hogy jó úton jártok?", type:"text", options:["olyan innovációkat sikerült megvalósítanunk, mely egyedülálló az iparágunkban és sok újítás van még a tarsolyunkban","több területen sikerült domináns piaci szereplővé válni, cégünk a kategória megkerülhetetlen tényezőjévé vált","mindenki tudja a dolgát, mindennek megvan a gazdája, a szervezet flottul működik és ezáltal jobban tudunk építeni az embereink szakértelmére","kellemes a munkakörnyezet, nincs konfliktus, széthúzás, versengés csak nyugodt, egymásra odafigyelő és előremutató párbeszéd","összekovácsoltunk egy jó csapatot (kicsi a fluktuáció, könnyű embert találni), jó a házon belüli és az ügyfelekkel való együttműködés","az emberek élvezik a munkájukat, örömüket lelik abban, hogy itt dolgoznak nem csupán a társaság miatt, hanem mert itt nyitottak az ötleteikre"], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Venus"] },
-  { q:"Milyen az ideális munkatárs?", type:"text", options:["Aki proaktív, elébe megy a dolgoknak, ezáltal a változások motorja","Aki karizmatikus, kezébe veszi még a nehéz feladatokat és meg is valósítja őket","Aki precíz, fegyelmezett, fókuszált és pontosan tudod, miben számíthatsz rá","Aki képes arra, hogy a különböző álláspontokat közös nevezőre hozza","Aki igazi csapatjátékos és a legtöbbet tudja kihozni másokból","Aki mindig optimistán áll a dolgokhoz, tele van jó ötletekkel"], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Venus"] },
-  { q:"Mi a cég sikerstratégiája?", type:"text", options:["a státus qou megkérdőjelezése","a vízió és a hatékony vezetés","az elemzésen alapuló tervezés","a biztos alapok lefektetése","a különböző igények kielégítése","a lehetőségek kiaknázása"], archetypes:["Mars","Jupiter","Apollo","Ceres","Juno","Venus"] },
+  { q:"Vendégváró tér", type:"image", options:[
+    "https://picsum.photos/600/400?random=1",
+    "https://picsum.photos/600/400?random=2",
+    "https://picsum.photos/600/400?random=3",
+    "https://picsum.photos/600/400?random=4",
+    "https://picsum.photos/600/400?random=5",
+    "https://picsum.photos/600/400?random=6",
+    "https://picsum.photos/600/400?random=7",
+    "https://picsum.photos/600/400?random=8"
+  ]},
+  // IDE RAKHATOD A TÖBBI 7–8 LÉPÉST UGYANEZZEL A 8-OPCIÓS SÉMÁVAL
+  { q:"Csak a képzelet szab nekünk határt", type:"text", options:[
+    "Ez a jó irány, és mi meg is valósítjuk.",
+    "A tudás hatalom",
+    "A kompromisszumkészség erény, nem gyengeség",
+    "Egyedül kicsik vagyunk, együtt nagyot alkotunk",
+    "A világ a mi játszóterünk",
+    "A változásokból rugalmasan és optimistán kihozzuk a legjobbat.",
+    "Stabil, földelt alapokra építkezünk.",
+    "A gondoskodás és biztonság az első."
+  ]},
+  // … folytathatod a többi kérdéssel, mindegyik options tömb 8 elemmel
 ];
 
+// archetype hozzárendelés MINDEN kérdésnél
 stepsData.forEach((s, i) => {
+  const archetypeOrder = textArchetypesOrder; // minden stepnél ugyanaz a sorrend
   let optionsHtml = s.options.map((opt, idx) => {
+    const archetype = archetypeOrder[idx];
     if(s.type==="image"){
-      return `<div class="option" data-archetype="${s.archetypes[idx]}"><img src="${opt}"></div>`;
+      return `<div class="option" data-archetype="${archetype}"><img src="${opt}" alt=""></div>`;
     } else {
-      return `<div class="option" data-archetype="${s.archetypes[idx]}">${opt}</div>`;
+      return `<div class="option" data-archetype="${archetype}">${opt}</div>`;
     }
   }).join("");
   stepsEl.innerHTML += `
@@ -211,11 +317,11 @@ stepsData.forEach((s, i) => {
   `;
 });
 
-// végső step – csak eredmény, nincs új név/email, külön státusz szöveggel
+// végső step összevontan – eredmény + küldés
 stepsEl.innerHTML += `
 <div class="step">
   <h2>Eredményed</h2>
-  <div class="result" id="result"></div>
+  <ul class="result-list" id="result"></ul>
   <button id="sendBtn" onclick="sendResults()">Eredmény mentése</button>
   <div class="send-status" id="sendStatus"></div>
 </div>
@@ -223,6 +329,18 @@ stepsEl.innerHTML += `
 
 let current = 0;
 const steps = document.querySelectorAll(".step");
+const totalQuestionSteps = steps.length - 2; // az első (intro) + utolsó (eredmény) nélkül
+
+function updateProgress() {
+  // Kérdésszám: az aktuális step indexe - 1 (mert 0 az intro, utolsó az eredmény)
+  const questionIndex = Math.min(Math.max(current - 1, 0), totalQuestionSteps);
+  const total = totalQuestionSteps;
+  if (total <= 0) return;
+
+  progressLabel.textContent = `${questionIndex + 1} / ${total}`;
+  const percent = ((questionIndex) / total) * 100;
+  progressBar.style.width = `${percent}%`;
+}
 
 // start quiz
 function startQuiz(){
@@ -235,6 +353,11 @@ function startQuiz(){
   steps[0].classList.remove("active");
   current++;
   steps[current].classList.add("active");
+
+  // címsor helyett progress bar
+  quizHeader.style.display = "none";
+  progressWrap.style.display = "block";
+  updateProgress();
 }
 
 // kiválasztás
@@ -245,7 +368,7 @@ document.addEventListener("click", e=>{
   option.classList.add("selected");
 });
 
-// lépés váltás – utolsó kérdés gombja visz az eredmény stepre, ott már küldünk
+// lépés váltás – utolsó kérdés után eredmény + küldés gomb
 function nextStep(){
   const selected = steps[current].querySelector(".option.selected");
   if(!selected) { 
@@ -255,27 +378,32 @@ function nextStep(){
   archetypes[selected.dataset.archetype]++;
   steps[current].classList.remove("active");
   current++;
-  if(current===steps.length-1) showResult();
+
+  if(current === steps.length - 1) {
+    showResult();
+  }
+
   steps[current].classList.add("active");
+  updateProgress();
   window.scrollTo({top:0, behavior:"smooth"});
 }
 
 // eredmény megjelenítés
 function showResult(){
-  const total = Object.values(archetypes).reduce((a,b)=>a+b,0);
-  let html="<ul>";
-  for(const [k,v] of Object.entries(archetypes)){
-    html+=`<li><strong>${k}</strong><span>${Math.round(v/total*100)}%</span></li>`;
+  const total = Object.values(archetypes).reduce((a,b)=>a+b,0) || 1;
+  let html="";
+  for(const key of textArchetypesOrder){
+    const v = archetypes[key] || 0;
+    html += `<li><strong>${key}</strong><span>${Math.round(v/total*100)}%</span></li>`;
   }
-  html+="</ul>";
   document.getElementById("result").innerHTML=html;
 }
 
-// mentés Google Sheet-be – Vercel proxyval, a START mezőkből, egyszeri kattintás + loading
+// mentés Google Sheet-be – Vercel proxyval, egyszeri kattintás + loading
 let isSending = false;
 
 function sendResults(){
-  if (isSending) return; // több kattintás tiltása
+  if (isSending) return;
 
   const email = document.getElementById("startEmail").value.trim();
   const name = document.getElementById("startName").value.trim();
