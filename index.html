@@ -249,50 +249,15 @@ button:disabled{opacity:.6}
 
 
 .input-checkbox{
-  -webkit-appearance:none;
-  appearance:none;
   width:12px;
   height:12px;
   border-radius:3px;
   border:1px solid var(--border-soft);
   background:var(--bg-soft);
   display:inline-block;
-  position:relative;
   cursor:pointer;
-  padding: 8px;
+  accent-color:#ffffff;
 }
-
-/* hover/ fókusz állapot */
-.input-checkbox:hover{
-  border-color:#ffffff88;
-}
-
-.input-checkbox:focus-visible{
-  outline:2px solid #ffffff66;
-  outline-offset:2px;
-}
-
-/* bepipált állapot */
-.input-checkbox:checked{
-  background:#fff;
-  border-color:#fff;
-}
-
-/* pipa rajzolása */
-.input-checkbox::after{
-  content:"";
-  position:absolute;
-  inset:2px;
-  border-right:1.5px solid #000;
-  border-bottom:1.5px solid #000;
-  transform:rotate(45deg) scale(0);
-  transform-origin:center;
-  transition:transform 0.15s ease;
-}
-  
-.input-checkbox:checked::after{
-  transform:rotate(45deg) scale(1);
-}  
 </style>
   
 </head>
