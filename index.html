@@ -112,9 +112,7 @@ p{
 }
 
 .option.selected{
-  background:#fff;
   color:#000;
-  border-color:#fff;
 }
 
 button{
@@ -573,6 +571,18 @@ function updateProgress() {
   progressBar.style.width = `${percent}%`;
 }
 
+const optionColors = [
+  "#BC1766",
+  "#95C11F",
+  "#736CED",
+  "#EFD200",
+  "#009688",
+  "#F7A600",
+  "#1978D8",
+  "#F24D49"
+];
+
+  
 // start quiz
 function startQuiz(){
   const email = document.getElementById("startEmail").value.trim();
@@ -602,9 +612,25 @@ function startQuiz(){
 document.addEventListener("click", e=>{
   const option = e.target.closest(".option");
   if(!option) return;
-  option.parentElement.querySelectorAll(".option").forEach(o=>o.classList.remove("selected"));
+
+  // előző kiválasztott törlése + háttér reset
+  option.parentElement.querySelectorAll(".option").forEach(o=>{
+    o.classList.remove("selected");
+    o.style.backgroundColor = ""; // reset
+    o.style.color = "";           // reset szöveg
+    o.style.borderColor = "var(--border-soft)";
+  });
+
+  // új kiválasztott
   option.classList.add("selected");
+
+  // random szín választása a listából
+  const randomColor = optionColors[Math.floor(Math.random() * optionColors.length)];
+  option.style.backgroundColor = randomColor;
+  option.style.color = "#000";
+  option.style.borderColor = randomColor;
 });
+
 
 // lépés váltás (köztes kérdésekhez)
 function nextStep(){
