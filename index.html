@@ -165,11 +165,19 @@ button:disabled{opacity:.6}
   justify-content:space-between;
 }
 
-.result-head:hover .arrow{transform:rotate(180deg)}
+.result-head:hover .arrow:not(.expanded) { transform: rotate(180deg); }
+
+.result-card.expanded .result-head:hover .arrow { transform: rotate(0deg); }
 
 .result-title{font-variation-settings:"wght" 500}
 .result-percent{opacity:.6; font-variation-settings:"wght" 500}
-.arrow{font-size:16px; transition:transform 0.3s ease; display:inline-block}
+.arrow {
+  font-size: 16px;
+  transition: transform 0.3s ease;
+  display: inline-block;
+  transform: rotate(0deg);
+}
+
   
 .result-wrapper {
   display: flex;
@@ -255,6 +263,25 @@ button:disabled{opacity:.6}
   display:inline-block;
   cursor:pointer;
   accent-color: black;
+}
+
+.visit-btn{
+  display:block;
+  margin-top:24px;
+  width:100%;
+  padding:14px;
+  border-radius:16px;
+  text-align:center;
+  background:#ffffff;
+  color:#000000;
+  font-size:15px;
+  text-decoration:none;
+  font-family:"atyp-bl-variable",system-ui,sans-serif;
+  font-variation-settings:"wght" 500;
+}
+
+.visit-btn:hover{
+  opacity:0.9;
 }
 </style>
   
@@ -548,20 +575,22 @@ stepsData.forEach((s, i) => {
   `;
 });
 
-// végső step – CSAK eredmény (küldés után jelenik meg)
 stepsEl.innerHTML += `
 <div class="step">
   <h2>Eredményed</h2>
   <div class="result-list" id="result"></div>
+
+  <a href="https://brandbar.hu" target="_blank" class="visit-btn">
+    Látogass el weboldalunkra
+  </a>
 </div>
 `;
 
 let current = 0;
 const steps = document.querySelectorAll(".step");
-const totalQuestionSteps = stepsData.length; // intro és eredmény nélkül
+const totalQuestionSteps = stepsData.length;
 
 function updateProgress() {
-  // current: 0 = intro, 1..N kérdések, utolsó = eredmény
   const questionIndex = Math.min(Math.max(current - 1, 0), totalQuestionSteps - 1);
   const total = totalQuestionSteps;
   if (total <= 0) return;
@@ -616,8 +645,8 @@ document.addEventListener("click", e=>{
   // előző kiválasztott törlése + háttér reset
   option.parentElement.querySelectorAll(".option").forEach(o=>{
     o.classList.remove("selected");
-    o.style.backgroundColor = ""; // reset
-    o.style.color = "";           // reset szöveg
+    o.style.backgroundColor = "";
+    o.style.color = "";
     o.style.borderColor = "var(--border-soft)";
   });
 
@@ -632,7 +661,6 @@ document.addEventListener("click", e=>{
 });
 
 
-// lépés váltás (köztes kérdésekhez)
 function nextStep(){
   const selected = steps[current].querySelector(".option.selected");
   if(!selected) { 
@@ -690,8 +718,19 @@ function showResult(){
   document.getElementById("result").innerHTML = html;
   
   document.querySelectorAll(".result-card").forEach(card => {
-    card.querySelector(".result-head").addEventListener("click", () => {
+    const head = card.querySelector(".result-head");
+    const arrow = card.querySelector(".arrow");
+    
+    head.addEventListener("click", (e) => {
+      arrow.style.transform = '';
+      
       card.classList.toggle("expanded");
+      
+      if (card.classList.contains("expanded")) {
+        arrow.style.transform = 'rotate(180deg)';
+      } else {
+        arrow.style.transform = 'rotate(0deg)';
+      }
     });
   });
 }
