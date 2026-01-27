@@ -251,15 +251,15 @@ button:disabled{opacity:.6}
 .input-checkbox{
   -webkit-appearance:none;
   appearance:none;
-  width:16px;
-  height:16px;
-  border-radius:4px;
+  width:12px;
+  height:12px;
+  border-radius:3px;
   border:1px solid var(--border-soft);
   background:var(--bg-soft);
   display:inline-block;
   position:relative;
   cursor:pointer;
-  margin-top:3px;
+  margin-top:4px;
 }
 
 /* hover/ fókusz állapot */
@@ -282,14 +282,14 @@ button:disabled{opacity:.6}
 .input-checkbox::after{
   content:"";
   position:absolute;
-  inset:3px;
-  border-right:2px solid #000;
-  border-bottom:2px solid #000;
+  inset:2px;
+  border-right:1.5px solid #000;
+  border-bottom:1.5px solid #000;
   transform:rotate(45deg) scale(0);
   transform-origin:center;
   transition:transform 0.15s ease;
 }
-
+  
 .input-checkbox:checked::after{
   transform:rotate(45deg) scale(1);
 }  
