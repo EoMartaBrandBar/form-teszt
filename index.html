@@ -156,7 +156,6 @@ input{
 .result-head{
   display:flex;
   justify-content:space-between;
-  align-items:center;
 }
 
 .result-head:hover .arrow{transform:rotate(180deg)}
@@ -164,19 +163,26 @@ input{
 .result-title{font-variation-settings:"wght" 500}
 .result-percent{opacity:.6; font-variation-settings:"wght" 500}
 .arrow{font-size:16px; transition:transform 0.3s ease; display:inline-block}
-
+  
+.result-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+  
 .result-desc{
   max-height:0;
   overflow:hidden;
   opacity:0;
-  font-size:13px;
+  font-size: 15px;
+  line-height: 20px;
   color:var(--text-muted);
   margin-top:12px;
   transition:max-height 0.3s ease, opacity 0.3s ease;
 }
 
 .result-card.expanded .result-desc{
-  max-height:200px;
+  max-height:1000px;
   opacity:1;
   margin-top:16px;
 }
@@ -263,7 +269,6 @@ const quizHeader = document.getElementById("quizHeader");
 
 const archetypeOrder = ["Mars","Mercurius","Jupiter","Apollo","Terra","Ceres","Juno","Venus"];
 
-// kezdő step
 stepsEl.innerHTML += `
 <div class="step active">
   <h2>Üdvözlünk a Márkaszemélyiség kvízben!</h2>
@@ -562,11 +567,22 @@ function nextStep(){
   window.scrollTo({top:0, behavior:"smooth"});
 }
 
-// eredmény megjelenítés (külön step)
+const archetypeDescriptions = {
+  Mars: "Itt a Mars leírása, amit te írsz meg.",
+  Mercurius: "Itt a Mercurius leírása.",
+  Jupiter: "Itt a Jupiter leírása.",
+  Apollo: "Itt az Apollo leírása.",
+  Terra: "Itt a Terra leírása.",
+  Ceres: "Itt a Ceres leírása.",
+  Juno: "Itt a Juno leírása.",
+  Venus: "Itt a Venus leírása."
+};
+
+  
+// eredmény megjelenítés
 function showResult(){
   const total = Object.values(archetypes).reduce((a,b)=>a+b,0) || 1;
   
-  // Pontszámok tömb készítése csökkenő sorrendben
   const scores = Object.entries(archetypes).map(([name, score]) => ({
     name,
     percent: Math.round(score / total * 100)
@@ -574,17 +590,18 @@ function showResult(){
   
   let html = "";
   scores.forEach(score => {
+    const desc = archetypeDescriptions[score.name] || "";
     html += `
       <div class="result-card" data-name="${score.name}">
         <div class="result-head">
-          <div>
+          <div class="result-wrapper">
             <div class="result-title">${score.name}</div>
             <div class="result-percent">${score.percent}%</div>
           </div>
           <span class="arrow">▼</span>
         </div>
         <div class="result-desc">
-          Ez az archetípus ${score.percent}% arányban jelenik meg a márkád személyiségében.
+          ${desc}
         </div>
       </div>
     `;
@@ -592,7 +609,6 @@ function showResult(){
   
   document.getElementById("result").innerHTML = html;
   
-  // Dropdown kattintás eseménykezelő
   document.querySelectorAll(".result-card").forEach(card => {
     card.querySelector(".result-head").addEventListener("click", () => {
       card.classList.toggle("expanded");
@@ -600,7 +616,7 @@ function showResult(){
   });
 }
 
-// utolsó kérdés gombja – ment és aztán eredmény step
+
 let isSending = false;
 
 function sendResults(){
@@ -638,9 +654,8 @@ function sendResults(){
     console.log("Válasz a szervertől:", text);
     statusEl.textContent = "Az eredményeket elmentettük. Köszönjük a kitöltést!";
 
-    // lépés az EREDMÉNY stepre
     steps[current].classList.remove("active");
-    current = steps.length - 1; // utolsó step
+    current = steps.length - 1;
     steps[current].classList.add("active");
     progressBar.style.width = "100%";
     progressLabel.textContent = `${totalQuestionSteps} / ${totalQuestionSteps}`;
