@@ -223,6 +223,24 @@ input{
 .quiz-header {
   margin: 28px 0px 32px 0px;
 }
+
+.consent-row{
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+  font-size:12px;
+  margin-top:8px;
+}
+
+.consent-checkbox{
+  margin-top:3px;
+}
+
+.consent-text a{
+  color:#fff;
+  text-decoration:none;
+}
+
 </style>
   
 </head>
@@ -276,9 +294,14 @@ stepsEl.innerHTML += `
   <input type="email" placeholder="Email címed" id="startEmail">
   <input type="text" placeholder="Név" id="startName">
 
-  <label style="display:flex; gap:8px; align-items:flex-start; font-size:12px; margin-top:8px;">
-    <input type="checkbox" id="privacyConsent" style="margin-top:3px;">
-    <span>Elolvastam és elfogadom az <a href="https://www.brandbar.hu/privacy-policy" target="_blank" rel="noopener">Adatkezelési tájékoztatót</a>.</span>
+  <label class="consent-row">
+  <input type="checkbox" id="privacyConsent" class="consent-checkbox">
+  <span class="consent-text">
+    Elolvastam és elfogadom az 
+    <a href="https://www.brandbar.hu/privacy-policy" target="_blank" rel="noopener">
+      Adatkezelési tájékoztatót
+    </a>.
+  </span>
   </label>
 
   <button onclick="startQuiz()">Kezdhetjük</button>
