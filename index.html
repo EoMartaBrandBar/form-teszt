@@ -177,21 +177,53 @@ input{
   margin-top:16px;
 }
 
-.footer{
-  margin-top:40px;
-  text-align:center;
-  font-size:12px;
-  opacity:.6;
+.footer {
+    margin-top: 40px;
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    opacity: .6;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    justify-content: center;
 }
-
+  
 .footer a{
   color:#fff;
   text-decoration:none;
 }
+
+.quiz-logo-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  border-radius: 16px 16px 0 0;
+  background: transparent;
+}
+
+.quiz-logo {
+  max-height: 32px;
+  height: auto;
+  width: auto;
+  display: block;
+}
+  
 </style>
 </head>
 <body>
 <div class="quiz">
+  <div class="quiz-logo-bar">
+    <a href="https://brandbar.hu" target="_blank" rel="noopener">
+      <img
+        src="https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/69786bf5b6ecc66feb353812_921a5f481ecad0dce6b3e742fb3c0cb8_BB%20logo.png"
+        alt="Brandbar logó"
+        class="quiz-logo"
+      >
+    </a>
+  </div>
+
   <div class="quiz-header" id="quizHeader">
     <h1 class="quiz-title">Márkaszemélyiség kvíz</h1>
     <p class="quiz-sub">Fedezd fel melyik archetípus testesíti meg a márkádat</p>
@@ -211,6 +243,7 @@ input{
     <a href="https://www.brandbar.hu/privacy-policy" target="_blank">Adatkezelési tájékoztató</a>
   </footer>
 </div>
+
   
 <script>
 const archetypes = { Mars:0, Mercurius:0, Jupiter:0, Apollo:0, Terra:0, Ceres:0, Juno:0, Venus:0 };
