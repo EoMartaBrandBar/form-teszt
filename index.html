@@ -717,12 +717,16 @@ function showResult(){
     percent: Math.round(score / total * 100)
   })).sort((a, b) => b.percent - a.percent);
   
-  // maximum százalék meghatározása (csak a >0 értékek közül)
   const maxPercent = scores.reduce((max, s) => s.percent > max ? s.percent : max, 0);
-  
-  // nullásakat külön jelöljük
+
+  // csak a >0%-osak indexelése a skálázáshoz
+  const nonZeroScores = scores.filter(s => s.percent > 0);
+  const n = nonZeroScores.length;
+  const minAlpha = 0.2;   // legutolsó kb. 20%
+  const maxAlpha = 1.0;   // legelső 100%
+
   let html = "";
-  scores.forEach((score, index) => {
+  scores.forEach((score) => {
     const desc = archetypeDescriptions[score.name] || "";
     const baseColor = archetypeColors[score.name] || "#1d1d23";
 
@@ -735,18 +739,23 @@ function showResult(){
         cardBg = baseColor;
         cardBorder = baseColor;
       } else {
-        // nem legmagasabb: fokozatosan halványabb
-        // alfa skála: kb. 0.25–0.8 között
-        const position = index + 1; // sorban elfoglalt hely
-        const maxIndex = scores.length;
-        const alpha = 0.8 - ( (position - 1) / (maxIndex - 1 || 1) ) * 0.55;
-        const rgba = hexToRgba(baseColor, Math.max(0.25, alpha));
+        // saját pozíció a csak-pozitív listában
+        const idx = nonZeroScores.findIndex(s => s.name === score.name);
+
+        let alpha;
+        if (n <= 1) {
+          alpha = maxAlpha;
+        } else {
+          // lineáris skála: első = maxAlpha, utolsó = minAlpha
+          alpha = maxAlpha - (idx / (n - 1)) * (maxAlpha - minAlpha);
+        }
+
+        const rgba = hexToRgba(baseColor, alpha);
         cardBg = rgba;
         cardBorder = baseColor;
       }
     }
 
-    // nullás: marad az alap háttér
     html += `
       <div class="result-card" data-name="${score.name}" style="background:${cardBg}; border-color:${cardBorder};">
         <div class="result-head">
@@ -765,21 +774,16 @@ function showResult(){
   
   document.getElementById("result").innerHTML = html;
   
-  // Javított event listener
   document.querySelectorAll(".result-card").forEach(card => {
     const head = card.querySelector(".result-head");
     const arrow = card.querySelector(".arrow");
     
-    head.addEventListener("click", (e) => {
-      arrow.style.transform = ''; // Reset
-      
+    head.addEventListener("click", () => {
+      arrow.style.transform = '';
       card.classList.toggle("expanded");
-      
-      if (card.classList.contains("expanded")) {
-        arrow.style.transform = 'rotate(180deg)';
-      } else {
-        arrow.style.transform = 'rotate(0deg)';
-      }
+      arrow.style.transform = card.classList.contains("expanded")
+        ? 'rotate(180deg)'
+        : 'rotate(0deg)';
     });
   });
 }
