@@ -133,8 +133,17 @@ button{
 
 button:disabled{opacity:.6}
 
-input{
+.input-data{
   width:100%;
+  padding:13px;
+  border-radius:12px;
+  border:1px solid var(--border-soft);
+  background:var(--bg-soft);
+  color:#fff;
+  margin-bottom:10px;
+}
+
+.input-checkbox{
   padding:13px;
   border-radius:12px;
   border:1px solid var(--border-soft);
@@ -232,10 +241,6 @@ input{
   margin-top:8px;
 }
 
-.consent-checkbox{
-  margin-top:3px;
-}
-
 .consent-text a{
   color:#fff;
   text-decoration:none;
@@ -295,11 +300,11 @@ stepsEl.innerHTML += `
 <div class="step active">
   <h2>Üdvözlünk a Márkaszemélyiség kvízben!</h2>
   <p>Ez a kvíz segít feltérképezni, milyen archetípus jellemzi a céged. Kezdésnek kérjük, add meg a neved és email címed:</p>
-  <input type="email" placeholder="Email címed" id="startEmail">
-  <input type="text" placeholder="Név" id="startName">
+  <input type="email" placeholder="Email címed" id="startEmail" class="input-data">
+  <input type="text" placeholder="Név" id="startName" class="input-data">
 
   <label class="consent-row">
-  <input type="checkbox" id="privacyConsent" class="consent-checkbox">
+  <input type="checkbox" id="privacyConsent" class="input-checkbox">
   <span class="consent-text">
     Elolvastam és elfogadom az 
     <a href="https://www.brandbar.hu/privacy-policy" target="_blank" rel="noopener">
