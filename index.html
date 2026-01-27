@@ -273,8 +273,8 @@ button:disabled{opacity:.6}
   padding:14px;
   border-radius:16px;
   text-align:center;
-  background:#ffffff;
-  color:#000000;
+  background:#736CED;
+  color:white;
   font-size:15px;
   text-decoration:none;
   font-family:"atyp-bl-variable",system-ui,sans-serif;
@@ -687,21 +687,68 @@ const archetypeDescriptions = {
   Venus: "Itt a Venus leírása."
 };
 
+
+const archetypeColors = {
+  Mars:   "#F24D49",
+  Mercurius: "#BC1766",
+  Jupiter:   "#736CED",
+  Apollo:    "#1978D8",
+  Terra:     "#009688",
+  Ceres:     "#95C11F",
+  Juno:      "#EFD200",
+  Venus:     "#F7A600"
+};
+
+function hexToRgba(hex, alpha){
+  const h = hex.replace("#","");
+  const r = parseInt(h.substring(0,2),16);
+  const g = parseInt(h.substring(2,4),16);
+  const b = parseInt(h.substring(4,6),16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+  
   
 // eredmény megjelenítés
 function showResult(){
   const total = Object.values(archetypes).reduce((a,b)=>a+b,0) || 1;
   
-  const scores = Object.entries(archetypes).map(([name, score]) => ({
+  let scores = Object.entries(archetypes).map(([name, score]) => ({
     name,
     percent: Math.round(score / total * 100)
   })).sort((a, b) => b.percent - a.percent);
   
+  // maximum százalék meghatározása (csak a >0 értékek közül)
+  const maxPercent = scores.reduce((max, s) => s.percent > max ? s.percent : max, 0);
+  
+  // nullásakat külön jelöljük
   let html = "";
-  scores.forEach(score => {
+  scores.forEach((score, index) => {
     const desc = archetypeDescriptions[score.name] || "";
+    const baseColor = archetypeColors[score.name] || "#1d1d23";
+
+    let cardBg = "var(--bg-soft)";
+    let cardBorder = "var(--border-soft)";
+
+    if (score.percent > 0 && maxPercent > 0) {
+      if (score.percent === maxPercent) {
+        // legmagasabb: teljes szín
+        cardBg = baseColor;
+        cardBorder = baseColor;
+      } else {
+        // nem legmagasabb: fokozatosan halványabb
+        // alfa skála: kb. 0.25–0.8 között
+        const position = index + 1; // sorban elfoglalt hely
+        const maxIndex = scores.length;
+        const alpha = 0.8 - ( (position - 1) / (maxIndex - 1 || 1) ) * 0.55;
+        const rgba = hexToRgba(baseColor, Math.max(0.25, alpha));
+        cardBg = rgba;
+        cardBorder = baseColor;
+      }
+    }
+
+    // nullás: marad az alap háttér
     html += `
-      <div class="result-card" data-name="${score.name}">
+      <div class="result-card" data-name="${score.name}" style="background:${cardBg}; border-color:${cardBorder};">
         <div class="result-head">
           <div class="result-wrapper">
             <div class="result-title">${score.name}</div>
@@ -718,12 +765,13 @@ function showResult(){
   
   document.getElementById("result").innerHTML = html;
   
+  // Javított event listener
   document.querySelectorAll(".result-card").forEach(card => {
     const head = card.querySelector(".result-head");
     const arrow = card.querySelector(".arrow");
     
     head.addEventListener("click", (e) => {
-      arrow.style.transform = '';
+      arrow.style.transform = ''; // Reset
       
       card.classList.toggle("expanded");
       
@@ -735,6 +783,7 @@ function showResult(){
     });
   });
 }
+
 
 
 let isSending = false;
