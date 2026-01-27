@@ -275,6 +275,12 @@ stepsEl.innerHTML += `
   <p>Ez a kvíz segít feltérképezni, milyen archetípus jellemzi a céged. Kezdésnek kérjük, add meg a neved és email címed:</p>
   <input type="email" placeholder="Email címed" id="startEmail">
   <input type="text" placeholder="Név" id="startName">
+
+  <label style="display:flex; gap:8px; align-items:flex-start; font-size:12px; margin-top:8px;">
+    <input type="checkbox" id="privacyConsent" style="margin-top:3px;">
+    <span>Elolvastam és elfogadom az <a href="https://www.brandbar.hu/privacy-policy" target="_blank" rel="noopener">Adatkezelési tájékoztatót</a>.</span>
+  </label>
+
   <button onclick="startQuiz()">Kezdhetjük</button>
 </div>
 `;
@@ -531,10 +537,18 @@ function updateProgress() {
 function startQuiz(){
   const email = document.getElementById("startEmail").value.trim();
   const name = document.getElementById("startName").value.trim();
+  const consent = document.getElementById("privacyConsent").checked;
+
   if(!email || !name) { 
     alert("Kérlek add meg az email címed és neved!"); 
     return; 
   }
+
+  if(!consent){
+    alert("Kérlek pipáld be, hogy elolvastad és elfogadod az Adatkezelési tájékoztatót!");
+    return;
+  }
+
   steps[0].classList.remove("active");
   current = 1;
   steps[current].classList.add("active");
