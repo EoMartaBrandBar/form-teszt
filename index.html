@@ -246,6 +246,53 @@ button:disabled{opacity:.6}
   text-decoration:none;
 }
 
+
+
+.input-checkbox{
+  -webkit-appearance:none;
+  appearance:none;
+  width:16px;
+  height:16px;
+  border-radius:4px;
+  border:1px solid var(--border-soft);
+  background:var(--bg-soft);
+  display:inline-block;
+  position:relative;
+  cursor:pointer;
+  margin-top:3px;
+}
+
+/* hover/ fókusz állapot */
+.input-checkbox:hover{
+  border-color:#ffffff88;
+}
+
+.input-checkbox:focus-visible{
+  outline:2px solid #ffffff66;
+  outline-offset:2px;
+}
+
+/* bepipált állapot */
+.input-checkbox:checked{
+  background:#fff;
+  border-color:#fff;
+}
+
+/* pipa rajzolása */
+.input-checkbox::after{
+  content:"";
+  position:absolute;
+  inset:3px;
+  border-right:2px solid #000;
+  border-bottom:2px solid #000;
+  transform:rotate(45deg) scale(0);
+  transform-origin:center;
+  transition:transform 0.15s ease;
+}
+
+.input-checkbox:checked::after{
+  transform:rotate(45deg) scale(1);
+}  
 </style>
   
 </head>
@@ -305,7 +352,7 @@ stepsEl.innerHTML += `
     Elolvastam és elfogadom az 
     <a href="https://www.brandbar.hu/privacy-policy" target="_blank" rel="noopener">
       Adatkezelési tájékoztatót
-    </a>.
+    </a>
   </span>
   </label>
 
