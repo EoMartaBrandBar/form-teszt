@@ -578,14 +578,38 @@ const stepsData = [
   }
 ];
 
+// Segédfüggvény a randomizált opciók generálásához
+function shuffleOptions(stepData) {
+  const shuffled = [...stepData.options];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  
+  // archetype sorrend is randomizáljuk ugyanúgy
+  const shuffledArchetypes = [...archetypeOrder];
+  for (let i = shuffledArchetypes.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledArchetypes[i], shuffledArchetypes[j]] = [shuffledArchetypes[j], shuffledArchetypes[i]];
+  }
+  
+  // párosítjuk őket: új sorrendben az options és archetype-ek
+  return shuffled.map((opt, idx) => ({
+    content: opt,
+    archetype: shuffledArchetypes[idx]
+  }));
+}
+
 // kérdés stepek generálása
 stepsData.forEach((s, i) => {
-  let optionsHtml = s.options.map((opt, idx) => {
-    const archetype = archetypeOrder[idx];
+  // Minden kérdésnél randomizáljuk az opciókat
+  const randomizedOptions = shuffleOptions(s);
+  
+  let optionsHtml = randomizedOptions.map((item) => {
     if(s.type === "image"){
-      return `<div class="option" data-archetype="${archetype}"><img src="${opt}" alt=""></div>`;
+      return `<div class="option" data-archetype="${item.archetype}"><img src="${item.content}" alt=""></div>`;
     } else {
-      return `<div class="option" data-archetype="${archetype}">${opt}</div>`;
+      return `<div class="option" data-archetype="${item.archetype}">${item.content}</div>`;
     }
   }).join("");
 
