@@ -579,30 +579,23 @@ const stepsData = [
 ];
 
 // Segédfüggvény a randomizált opciók generálásához
+// Segédfüggvény a randomizált opciók generálásához
 function shuffleOptions(stepData) {
-  const shuffled = [...stepData.options];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  
-  // archetype sorrend is randomizáljuk ugyanúgy
-  const shuffledArchetypes = [...archetypeOrder];
-  for (let i = shuffledArchetypes.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffledArchetypes[i], shuffledArchetypes[j]] = [shuffledArchetypes[j], shuffledArchetypes[i]];
-  }
-  
-  // párosítjuk őket: új sorrendben az options és archetype-ek
-  return shuffled.map((opt, idx) => ({
+  const paired = stepData.options.map((opt, idx) => ({
     content: opt,
-    archetype: shuffledArchetypes[idx]
+    archetype: archetypeOrder[idx]  // fix, az eredeti mapping szerint
   }));
+  
+  for (let i = paired.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [paired[i], paired[j]] = [paired[j], paired[i]];
+  }
+
+  return paired;
 }
 
 // kérdés stepek generálása
 stepsData.forEach((s, i) => {
-  // Minden kérdésnél randomizáljuk az opciókat
   const randomizedOptions = shuffleOptions(s);
   
   let optionsHtml = randomizedOptions.map((item) => {
