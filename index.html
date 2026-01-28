@@ -284,6 +284,12 @@ button:disabled{opacity:.6}
 .visit-btn:hover{
   opacity:0.9;
 }
+
+.error-message{
+  margin-top:8px;
+  font-size:12px;
+  color:#F24D49;
+}
 </style>
   
 </head>
@@ -347,6 +353,7 @@ stepsEl.innerHTML += `
   </span>
   </label>
 
+  <div id="startError" class="error-message"></div>
   <button onclick="startQuiz()">Kezdhetjük!</button>
 </div>
 `;
@@ -667,22 +674,25 @@ function startQuiz(){
   const email = document.getElementById("startEmail").value.trim();
   const name = document.getElementById("startName").value.trim();
   const consent = document.getElementById("privacyConsent").checked;
+  const errorEl = document.getElementById("startError");
+  errorEl.textContent = "";
 
   if (!email || !name) { 
-    alert("Kérlek add meg az email címed és neved!"); 
+    errorEl.textContent = "Kérlek add meg az email címed és neved!";
     return; 
   }
 
   if (!isValidEmail(email)) {
-    alert("Kérlek valós email címet adj meg (pl. valaki@domain.hu).");
+    errorEl.textContent = "Kérlek valós email címet adj meg (pl. valaki@domain.hu).";
     return;
   }
 
   if (!consent){
-    alert("Kérlek pipáld be, hogy elolvastad és elfogadod az Adatkezelési tájékoztatót!");
+    errorEl.textContent = "Kérlek pipáld be, hogy elolvastad és elfogadod az Adatkezelési tájékoztatót!";
     return;
   }
 
+  // ha minden oké:
   steps[0].classList.remove("active");
   current = 1;
   steps[current].classList.add("active");
