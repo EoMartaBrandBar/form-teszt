@@ -374,6 +374,20 @@ const stepsData = [
     ]
   },
   {
+    q:"Melyik állítás igaz rád leginkább?",
+    type:"text",
+    options:[
+      "Proaktív vagyok, elébe megyek a dolgoknak, folyamatosan megújítom a munkamódszereimet",
+      "Tisztában vagyok a trendekkel és hatékonyan alkalmazom az új fejlesztéseket",
+      "Kezembe veszem még a nehéz feladatokat is és el is végzem őket",
+      "Precíz, fegyelmezett, fókuszált, rendszerezett és hatékony vagyok",
+      "Lehet rám számítani, stabilan végzem a munkámat",
+      "Lehet hozzám fordulni segítségért, mindig készen áll támogatni a munkatársakat",
+      "Igazi csapatjátékos vagyok, a legtöbbet tudom kihozni másokból is",
+      "Mindig pozitívan állok a dolgokhoz, tele vagyok ötletekkel"
+    ]
+  },
+  {
     q:"Melyik tárgyalóba ülnél be legszívesebben?",
     type:"image",
     options:[
@@ -388,17 +402,17 @@ const stepsData = [
     ]
   },
   {
-    q:"Mivel dekorálnád az irodádat?",
-    type:"image",
+    q:"Melyik lenne a legnagyobb erősséged?",
+    type:"text",
     options:[
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c23c41ad28040a73c5bf_03_faldekor_1MARS.webp",
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c23c3697d0848f5ca0b6_03_faldekor_2MERCURIUS.webp",
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c23cd2970deafbfe5ef0_03_faldekor_3JUPITER.webp",
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c23caa9993594f2a8b4e_03_faldekor_4APOLLO.webp",
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a00fa6d49e1b5f61c207a_03_faldekor_5TERRA.webp",
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c23d524a421a193e6fc7_03_faldekor_6CERES.webp",
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c23da62958f6397c1323_03_faldekor_7JUNO.webp",
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c23ca71fcaa20b73cb80_03_faldekor_8VENUS.webp"
+      "Merészség az újításhoz, energia a megvalósításhoz",
+      "Az újdonságban rejlő lehetőségek kiaknázásának képessége",
+      "Megalkuvás nélküli megkérdőjelezhetetlenség",
+      "A precíz tervezés, tiszta folyamatok, a munkatársak tudása",
+      "A folytonosság biztonsága, távlatokban való gondolkodás",
+      "A felelős hozzáállás, mely túlmutat a formális kereteken is",
+      "Az eltérő nézőpontok elfogadása, képesség az együttműködésre",
+      "A változásokból rugalmasan és optimistán kihozni a legjobbat"
     ]
   },
   {
@@ -430,17 +444,45 @@ const stepsData = [
     ]
   },
   {
-    q:"Melyik betűtípus illik hozzád a legjobban?",
+    q:"Mi a sikerstratégiád?",
+    type:"text",
+    options:[
+      "A status quo megkérdőjelezése",
+      "Elsőként kovácsolni tőkét a piac változásaiból ",
+      "A vízió és a hatékony vezetés",
+      "Az elemzésen alapuló tervezés",
+      "A biztos alapok lefektetése és a bevált gyakorlatok alkalmazása",
+      "Felelősségteljes hozzáállás",
+      "A különböző igények kielégítése",
+      "Az új helyzetekre való rugalmas reagálás"
+    ]
+  },
+  {
+    q:"Mivel dekorálnád az irodádat?",
     type:"image",
     options:[
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fde77f66ab9bc93dfbc_06_targyalo-felirat_1MARS.webp",
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fdeb71cc599d484ed68_06_targyalo-felirat_2MERCURIUS.webp",
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fde06da1900a2bc5ed3_06_targyalo-felirat_3JUPITER.webp",
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fde26e692b2fcdb537b_06_targyalo-felirat_4APOLLO.webp",
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fde6862d0076f7ee797_06_targyalo-felirat_5TERRA.webp",
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fdec0d976996c05d876_06_targyalo-felirat_6CERES.webp",
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fdecb0ffbb283482176_06_targyalo-felirat_7JUNO.webp",
-      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fde00378091c5c4641d_06_targyalo-felirat_8VENUS.webp"
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c23c41ad28040a73c5bf_03_faldekor_1MARS.webp",
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c23c3697d0848f5ca0b6_03_faldekor_2MERCURIUS.webp",
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c23cd2970deafbfe5ef0_03_faldekor_3JUPITER.webp",
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c23caa9993594f2a8b4e_03_faldekor_4APOLLO.webp",
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a00fa6d49e1b5f61c207a_03_faldekor_5TERRA.webp",
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c23d524a421a193e6fc7_03_faldekor_6CERES.webp",
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c23da62958f6397c1323_03_faldekor_7JUNO.webp",
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c23ca71fcaa20b73cb80_03_faldekor_8VENUS.webp"
+    ]
+  },
+{
+    q:"Mi lenne számodra a legnagyobb szakmai kudarc?",
+    type:"text",
+    options:[
+      "Nem elég úttörő, amit csinálok",
+      "A versenytársaim megelőznek",
+      "Nem vagyok elég sikeres",
+      "Nem vagyok elég hatékony",
+      "Túl sok a bizonytalanság körülöttem",
+      "Csak a pénzért dolgozok",
+      "Nincs mellettem egy jó csapat",
+      "Unalmasak a feladataim"
     ]
   },
   {
@@ -458,6 +500,20 @@ const stepsData = [
     ]
   },
   {
+    q:"Melyik lehetne a jelmondatod?",
+    type:"text",
+    options:[
+      "Én vagyok a változás motorja",
+      "Én diktálom a tempót",
+      "Én írom a szabályokat",
+      "A tudás hatalom",
+      "Az idő nekem dolgozik",
+      "Legyen mindenkinek jó",
+      "Együtt nagyot alkotunk",
+      "A világ az én játszóterem"
+    ]
+  },
+  {
     q:"Melyik színskála áll hozzád legközelebb?",
     type:"image",
     options:[
@@ -469,6 +525,20 @@ const stepsData = [
       "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c24031fecc1150e11d91_08_szinek_6CERES.webp",
       "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c241d09e477bf16b064e_08_szinek_7JUNO.webp",
       "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c24123583ff196d7afac_08_szinek_8VENUS.webp"
+    ]
+  },
+  {
+    q:"Melyik betűtípus illik hozzád a legjobban?",
+    type:"image",
+    options:[
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fde77f66ab9bc93dfbc_06_targyalo-felirat_1MARS.webp",
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fdeb71cc599d484ed68_06_targyalo-felirat_2MERCURIUS.webp",
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fde06da1900a2bc5ed3_06_targyalo-felirat_3JUPITER.webp",
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fde26e692b2fcdb537b_06_targyalo-felirat_4APOLLO.webp",
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fde6862d0076f7ee797_06_targyalo-felirat_5TERRA.webp",
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fdec0d976996c05d876_06_targyalo-felirat_6CERES.webp",
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fdecb0ffbb283482176_06_targyalo-felirat_7JUNO.webp",
+      "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/697a0fde00378091c5c4641d_06_targyalo-felirat_8VENUS.webp"
     ]
   },
   {
@@ -498,85 +568,13 @@ const stepsData = [
       "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c24222d4dd1c601fd598_10_BB_7JUNO.webp",
       "https://cdn.prod.website-files.com/68c02379dfdad28c3492d8c5/6979c242e1e8dbc951d38a08_10_BB_8VENUS.webp"
     ]
-  },
-  {
-    q:"Melyik lehetne a jelmondatod?",
-    type:"text",
-    options:[
-      "Én vagyok a változás motorja",
-      "Én diktálom a tempót",
-      "Én írom a szabályokat",
-      "A tudás hatalom",
-      "Az idő nekem dolgozik",
-      "Legyen mindenkinek jó",
-      "Együtt nagyot alkotunk",
-      "A világ az én játszóterem"
-    ]
-  },
-  {
-    q:"Melyik lenne a legnagyobb erősséged?",
-    type:"text",
-    options:[
-      "Merészség az újításhoz, energia a megvalósításhoz",
-      "Az újdonságban rejlő lehetőségek kiaknázásának képessége",
-      "Megalkuvás nélküli megkérdőjelezhetetlenség",
-      "A precíz tervezés, tiszta folyamatok, a munkatársak tudása",
-      "A folytonosság biztonsága, távlatokban való gondolkodás",
-      "A felelős hozzáállás, mely túlmutat a formális kereteken is",
-      "Az eltérő nézőpontok elfogadása, képesség az együttműködésre",
-      "A változásokból rugalmasan és optimistán kihozni a legjobbat"
-    ]
-  },
-  {
-    q:"Mi lenne számodra a legnagyobb szakmai kudarc?",
-    type:"text",
-    options:[
-      "Nem elég úttörő, amit csinálok",
-      "A versenytársaim megelőznek",
-      "Nem vagyok elég sikeres",
-      "Nem vagyok elég hatékony",
-      "Túl sok a bizonytalanság körülöttem",
-      "Csak a pénzért dolgozok",
-      "Nincs mellettem egy jó csapat",
-      "Unalmasak a feladataim"
-    ]
-  },
-  {
-    q:"Melyik állítás igaz rád leginkább?",
-    type:"text",
-    options:[
-      "Proaktív vagyok, elébe megyek a dolgoknak, folyamatosan megújítom a munkamódszereimet",
-      "Tisztában vagyok a trendekkel és hatékonyan alkalmazom az új fejlesztéseket",
-      "Kezembe veszem még a nehéz feladatokat is és el is végzem őket",
-      "Precíz, fegyelmezett, fókuszált, rendszerezett és hatékony vagyok",
-      "Lehet rám számítani, stabilan végzem a munkámat",
-      "Lehet hozzám fordulni segítségért, mindig készen áll támogatni a munkatársakat",
-      "Igazi csapatjátékos vagyok, a legtöbbet tudom kihozni másokból is",
-      "Mindig pozitívan állok a dolgokhoz, tele vagyok ötletekkel"
-    ]
-  },
-  {
-    q:"Mi a sikerstratégiád?",
-    type:"text",
-    options:[
-      "A status quo megkérdőjelezése",
-      "Elsőként kovácsolni tőkét a piac változásaiból ",
-      "A vízió és a hatékony vezetés",
-      "Az elemzésen alapuló tervezés",
-      "A biztos alapok lefektetése és a bevált gyakorlatok alkalmazása",
-      "Felelősségteljes hozzáállás",
-      "A különböző igények kielégítése",
-      "Az új helyzetekre való rugalmas reagálás"
-    ]
   }
 ];
 
-// Segédfüggvény a randomizált opciók generálásához
-// Segédfüggvény a randomizált opciók generálásához
 function shuffleOptions(stepData) {
   const paired = stepData.options.map((opt, idx) => ({
     content: opt,
-    archetype: archetypeOrder[idx]  // fix, az eredeti mapping szerint
+    archetype: archetypeOrder[idx]
   }));
   
   for (let i = paired.length - 1; i > 0; i--) {
